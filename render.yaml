@@ -10,7 +10,7 @@ services:
       - key: NODE_VERSION
         value: "20"
       - key: SITE_URL
-        value: https://lionelsinaisinelnikoff.github.io/pocket-planter
+        value: https://www.pocket-planter.com
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: JWT_SECRET

@@ -37,6 +37,20 @@ npm start
 
 ## Live Site
 
-https://lionelsinaisinelnikoff.github.io/pocket-planter/
+https://www.pocket-planter.com
 
-> Stripe checkout requires the Node backend to be deployed (Render, Railway, etc.). The static GitHub Pages site shows the shop but redirects to Stripe only when the API is available.
+> Stripe checkout requires the Node backend on Render (`pocket-planter-api`). The static GitHub Pages site shows the shop but redirects to Stripe only when the API is available.
+
+## Custom Domain (Gandi)
+
+DNS records at [Gandi](https://admin.gandi.net/):
+
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+| CNAME | `www` | `lionelsinaisinelnikoff.github.io` |
+
+Remove any default Gandi parking/redirection records first. DNS can take up to 24 hours to propagate.
