@@ -21,6 +21,16 @@ html {
   scroll-padding-top: 4rem;
 }
 
+.nav-link {
+  color: #3f4a3c;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #006e1c;
+}
+
 body {
   min-height: 100dvh;
 }
@@ -330,9 +340,9 @@ body {
 
 /* Step cards active state */
 .step-card.active {
-  border-left-color: #4caf50;
-  box-shadow: 0 4px 20px rgba(0, 110, 28, 0.12);
-  transform: translateX(4px);
+  border-top-color: #4caf50;
+  box-shadow: 0 8px 28px rgba(0, 110, 28, 0.15);
+  transform: translateY(-4px);
 }
 
 /* Progress vine */

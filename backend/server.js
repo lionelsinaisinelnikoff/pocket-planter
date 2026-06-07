@@ -11,6 +11,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'pocket-planter-secret-change-in-production';
 const ROOT = path.join(__dirname, '..');
+const SITE_URL = process.env.SITE_URL || `http://localhost:${PORT}`;
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? require('stripe')(process.env.STRIPE_SECRET_KEY)
+  : null;
 
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 fs.mkdirSync(path.join(ROOT, 'uploads'), { recursive: true });
@@ -20,6 +24,25 @@ if (!db.prepare('SELECT COUNT(*) as c FROM content').get().c) {
 }
 
 app.use(cors());
+
+app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  if (!stripe || !process.env.STRIPE_WEBHOOK_SECRET) return res.sendStatus(400);
+  const sig = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch {
+    return res.sendStatus(400);
+  }
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    db.prepare(
+      "UPDATE orders SET status = 'paid' WHERE customer_email = ? AND status = 'pending_payment' ORDER BY created_at DESC LIMIT 1"
+    ).run(session.customer_email);
+  }
+  res.json({ received: true });
+});
+
 app.use(express.json());
 app.use(express.static(ROOT));
 app.use('/uploads', express.static(path.join(ROOT, 'uploads')));
@@ -126,6 +149,59 @@ app.post('/api/gallery', auth, (req, res) => {
 app.delete('/api/gallery/:id', auth, (req, res) => {
   db.prepare('DELETE FROM gallery WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
+});
+
+// ─── Stripe Checkout ────────────────────────────────────
+app.post('/api/create-checkout-session', async (req, res) => {
+  if (!stripe) {
+    return res.status(503).json({
+      error: 'Stripe not configured. Set STRIPE_SECRET_KEY in your environment.',
+    });
+  }
+
+  const { customer, items, total } = req.body;
+  if (!customer?.email || !items?.length || !total) {
+    return res.status(400).json({ error: 'Invalid checkout data' });
+  }
+
+  try {
+    const lineItems = items.map((item) => {
+      const addonText = item.addons?.length ? ` (${item.addons.join(', ')})` : '';
+      return {
+        price_data: {
+          currency: 'aed',
+          product_data: {
+            name: `${item.name}${addonText}`,
+            description: 'Pocket Planter — From Pocket to Plant',
+          },
+          unit_amount: Math.round(item.unitPrice * 100),
+        },
+        quantity: item.qty,
+      };
+    });
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      customer_email: customer.email,
+      line_items: lineItems,
+      success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/cancel.html`,
+      metadata: {
+        customer_name: customer.name || '',
+        order_total: String(total),
+      },
+    });
+
+    const orderId = `PP-${Date.now().toString(36).toUpperCase()}`;
+    db.prepare(
+      'INSERT INTO orders (id, customer_name, customer_email, items, total, status) VALUES (?, ?, ?, ?, ?, ?)'
+    ).run(orderId, customer.name || '', customer.email, JSON.stringify(items), total, 'pending_payment');
+
+    res.json({ url: session.url, sessionId: session.id, orderId });
+  } catch (err) {
+    console.error('Stripe error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // ─── Orders ─────────────────────────────────────────────
