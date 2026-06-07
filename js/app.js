@@ -1,4 +1,4 @@
-/* Pocket Planter — Dynamic App */
+/* Pocket Planter — Dynamic App (Brand Box Edition) */
 
 const BASE_PRICE = 28;
 const PRODUCT_IMAGES = [
@@ -10,71 +10,50 @@ const PRODUCT_IMAGES = [
   { src: 'assets/images/IMG_4270.jpg', alt: 'Pocket Planter held in hand' },
 ];
 
-const GALLERY_IMAGES = PRODUCT_IMAGES;
-
-// State
 let cart = loadCart();
 let currentImageIndex = 0;
 let lightboxIndex = 0;
 
-// DOM
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-// ─── Init ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initLoader();
-  initHeader();
   initNav();
   initReveal();
+  initLeaves();
   initGallery();
   initProductGallery();
   initSteps();
   initShop();
   initCart();
   initCheckout();
+  initBottomNav();
   updateCartUI();
 });
 
-// ─── Loader ─────────────────────────────────────────────
 function initLoader() {
   const loader = $('#pageLoader');
   window.addEventListener('load', () => {
-    setTimeout(() => loader.classList.add('hidden'), 600);
+    setTimeout(() => loader.classList.add('hidden'), 500);
   });
 }
 
-// ─── Header scroll ──────────────────────────────────────
-function initHeader() {
-  const header = $('#header');
-  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-}
-
-// ─── Mobile nav ─────────────────────────────────────────
 function initNav() {
   const toggle = $('#navToggle');
-  const links = $('#navLinks');
+  const mobileNav = $('#mobileNav');
 
-  toggle.addEventListener('click', () => {
-    const open = links.classList.toggle('open');
-    toggle.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
+  toggle?.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', !open);
   });
 
-  links.querySelectorAll('a').forEach((a) => {
-    a.addEventListener('click', () => {
-      links.classList.remove('open');
-      toggle.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
+  mobileNav?.querySelectorAll('a').forEach((a) => {
+    a.addEventListener('click', () => mobileNav.classList.add('hidden'));
   });
 }
 
-// ─── Scroll reveal ──────────────────────────────────────
 function initReveal() {
-  const els = $$('.reveal');
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -84,15 +63,26 @@ function initReveal() {
         }
       });
     },
-    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    { threshold: 0.12, rootMargin: '0px 0px -30px 0px' }
   );
-  els.forEach((el) => observer.observe(el));
+  $$('.reveal').forEach((el) => observer.observe(el));
 }
 
-// ─── Gallery ────────────────────────────────────────────
+function initLeaves() {
+  for (let i = 0; i < 8; i++) {
+    const leaf = document.createElement('span');
+    leaf.className = 'material-symbols-outlined leaf-decoration';
+    leaf.textContent = 'eco';
+    leaf.style.left = `${Math.random() * 100}vw`;
+    leaf.style.top = `${Math.random() * 100}vh`;
+    leaf.style.fontSize = `${Math.random() * 20 + 16}px`;
+    document.body.appendChild(leaf);
+  }
+}
+
 function initGallery() {
   const grid = $('#galleryGrid');
-  GALLERY_IMAGES.forEach((img, i) => {
+  PRODUCT_IMAGES.forEach((img, i) => {
     const item = document.createElement('div');
     item.className = 'gallery-item reveal';
     item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy">`;
@@ -100,13 +90,12 @@ function initGallery() {
     grid.appendChild(item);
   });
 
-  // Re-observe new reveal elements
   grid.querySelectorAll('.reveal').forEach((el) => {
-    const observer = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.classList.add('visible'); observer.unobserve(el); } },
-      { threshold: 0.15 }
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); } },
+      { threshold: 0.1 }
     );
-    observer.observe(el);
+    obs.observe(el);
   });
 
   $('#lightboxClose').addEventListener('click', closeLightbox);
@@ -116,8 +105,7 @@ function initGallery() {
     if (e.target.id === 'lightbox') closeLightbox();
   });
   document.addEventListener('keydown', (e) => {
-    const lb = $('#lightbox');
-    if (lb.hidden) return;
+    if ($('#lightbox').hidden) return;
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') navigateLightbox(-1);
     if (e.key === 'ArrowRight') navigateLightbox(1);
@@ -137,18 +125,16 @@ function closeLightbox() {
 }
 
 function navigateLightbox(dir) {
-  lightboxIndex = (lightboxIndex + dir + GALLERY_IMAGES.length) % GALLERY_IMAGES.length;
+  lightboxIndex = (lightboxIndex + dir + PRODUCT_IMAGES.length) % PRODUCT_IMAGES.length;
   updateLightboxImage();
 }
 
 function updateLightboxImage() {
-  const img = GALLERY_IMAGES[lightboxIndex];
-  const el = $('#lightboxImg');
-  el.src = img.src;
-  el.alt = img.alt;
+  const img = PRODUCT_IMAGES[lightboxIndex];
+  $('#lightboxImg').src = img.src;
+  $('#lightboxImg').alt = img.alt;
 }
 
-// ─── Product gallery ────────────────────────────────────
 function initProductGallery() {
   const thumbs = $('#productThumbs');
   PRODUCT_IMAGES.forEach((img, i) => {
@@ -170,10 +156,8 @@ function setProductImage(index) {
   $$('.product-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
 }
 
-// ─── Steps animation ────────────────────────────────────
 function initSteps() {
-  const steps = $$('.step');
-  const progress = $('#stepsProgress');
+  const steps = $$('.step-card');
   const section = $('#how-it-works');
 
   const observer = new IntersectionObserver(
@@ -183,37 +167,34 @@ function initSteps() {
         let active = 0;
         const interval = setInterval(() => {
           steps.forEach((s, i) => s.classList.toggle('active', i <= active));
-          progress.style.width = `${((active + 1) / steps.length) * 100}%`;
           active++;
           if (active >= steps.length) clearInterval(interval);
-        }, 500);
+        }, 450);
         observer.unobserve(section);
       });
     },
-    { threshold: 0.3 }
+    { threshold: 0.25 }
   );
   observer.observe(section);
 }
 
-// ─── Shop ───────────────────────────────────────────────
 function initShop() {
-  const addons = $$('.addon input');
-  const qty = $('#qty');
-
-  addons.forEach((a) => a.addEventListener('change', updatePrice));
+  $$('.addon input').forEach((a) => a.addEventListener('change', updatePrice));
   $('#qtyMinus').addEventListener('click', () => {
+    const qty = $('#qty');
     qty.value = Math.max(1, parseInt(qty.value, 10) - 1);
     updatePrice();
   });
   $('#qtyPlus').addEventListener('click', () => {
+    const qty = $('#qty');
     qty.value = Math.min(10, parseInt(qty.value, 10) + 1);
     updatePrice();
   });
-  qty.addEventListener('change', () => {
+  $('#qty').addEventListener('change', () => {
+    const qty = $('#qty');
     qty.value = Math.min(10, Math.max(1, parseInt(qty.value, 10) || 1));
     updatePrice();
   });
-
   $('#addToCart').addEventListener('click', addCurrentToCart);
   updatePrice();
 }
@@ -231,14 +212,12 @@ function getSelectedAddons() {
 }
 
 function getUnitPrice() {
-  const addonTotal = getSelectedAddons().reduce((s, a) => s + a.price, 0);
-  return BASE_PRICE + addonTotal;
+  return BASE_PRICE + getSelectedAddons().reduce((s, a) => s + a.price, 0);
 }
 
 function updatePrice() {
   const qty = parseInt($('#qty').value, 10) || 1;
-  const unit = getUnitPrice();
-  $('#totalPrice').textContent = unit * qty;
+  $('#totalPrice').textContent = getUnitPrice() * qty;
 }
 
 function addCurrentToCart() {
@@ -271,7 +250,6 @@ function addCurrentToCart() {
   openCart();
 }
 
-// ─── Cart ───────────────────────────────────────────────
 function initCart() {
   $('#cartBtn').addEventListener('click', openCart);
   $('#cartClose').addEventListener('click', closeCart);
@@ -312,20 +290,18 @@ function updateCartUI() {
 
   emptyEl.hidden = true;
   footerEl.hidden = false;
-
   itemsEl.querySelectorAll('.cart-item').forEach((el) => el.remove());
 
   let total = 0;
   cart.forEach((item) => {
     const lineTotal = item.unitPrice * item.qty;
     total += lineTotal;
-
-    const el = document.createElement('div');
-    el.className = 'cart-item';
     const addonText = item.addons.length
       ? item.addons.map((a) => a.name).join(', ')
       : 'Base kit only';
 
+    const el = document.createElement('div');
+    el.className = 'cart-item';
     el.innerHTML = `
       <img class="cart-item-img" src="${item.image}" alt="">
       <div class="cart-item-info">
@@ -337,24 +313,20 @@ function updateCartUI() {
         </div>
       </div>
     `;
-
     el.querySelector('.cart-item-remove').addEventListener('click', () => {
       cart = cart.filter((c) => c.id !== item.id);
       saveCart();
       updateCartUI();
     });
-
     itemsEl.appendChild(el);
   });
 
   $('#cartTotal').textContent = total;
 }
 
-// ─── Checkout ───────────────────────────────────────────
 function initCheckout() {
   $('#checkoutClose').addEventListener('click', closeCheckout);
   $('#checkoutOverlay').addEventListener('click', closeCheckout);
-
   $('#checkoutForm').addEventListener('submit', (e) => {
     e.preventDefault();
     submitOrder();
@@ -363,12 +335,9 @@ function initCheckout() {
 
 function openCheckout() {
   if (cart.length === 0) return;
-
   closeCart();
 
   const total = cart.reduce((s, i) => s + i.unitPrice * i.qty, 0);
-  const summary = $('#checkoutSummary');
-
   let html = '';
   cart.forEach((item) => {
     const addonText = item.addons.length
@@ -377,8 +346,7 @@ function openCheckout() {
     html += `<div class="summary-line"><span>${item.name}${addonText} × ${item.qty}</span><span>${item.unitPrice * item.qty} AED</span></div>`;
   });
   html += `<div class="summary-total"><span>Total</span><span>${total} AED</span></div>`;
-  summary.innerHTML = html;
-
+  $('#checkoutSummary').innerHTML = html;
   $('#checkoutTotal').textContent = total;
 
   $('#checkoutModal').hidden = false;
@@ -414,7 +382,6 @@ function submitOrder() {
     total: cart.reduce((s, i) => s + i.unitPrice * i.qty, 0),
   };
 
-  // Persist orders locally
   const orders = JSON.parse(localStorage.getItem('pp_orders') || '[]');
   orders.push(order);
   localStorage.setItem('pp_orders', JSON.stringify(orders));
@@ -424,11 +391,33 @@ function submitOrder() {
   updateCartUI();
   closeCheckout();
   $('#checkoutForm').reset();
-
   showToast(`Order ${order.id} placed! We'll email you at ${order.customer.email}.`);
 }
 
-// ─── Persistence ────────────────────────────────────────
+function initBottomNav() {
+  const items = $$('.bottom-nav-item');
+  const sections = ['hero', 'story', 'shop', 'pitch'];
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          items.forEach((item) => {
+            item.classList.toggle('active', item.dataset.section === id);
+          });
+        }
+      });
+    },
+    { threshold: 0.4, rootMargin: '-64px 0px -40% 0px' }
+  );
+
+  sections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+}
+
 function loadCart() {
   try {
     return JSON.parse(localStorage.getItem('pp_cart') || '[]');
@@ -441,7 +430,6 @@ function saveCart() {
   localStorage.setItem('pp_cart', JSON.stringify(cart));
 }
 
-// ─── Toast ──────────────────────────────────────────────
 function showToast(message) {
   const toast = $('#toast');
   toast.textContent = message;
