@@ -43,9 +43,14 @@ app.post('/api/stripe-webhook', express.raw({ type: 'application/json' }), async
   }
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    db.prepare(
-      "UPDATE orders SET status = 'paid' WHERE customer_email = ? AND status = 'pending_payment' ORDER BY created_at DESC LIMIT 1"
-    ).run(session.customer_email);
+    const orderId = session.metadata?.order_id;
+    if (orderId) {
+      db.prepare("UPDATE orders SET status = 'paid' WHERE id = ?").run(orderId);
+    } else if (session.customer_email) {
+      db.prepare(
+        "UPDATE orders SET status = 'paid' WHERE customer_email = ? AND status = 'pending_payment' ORDER BY created_at DESC LIMIT 1"
+      ).run(session.customer_email);
+    }
   }
   res.json({ received: true });
 });
@@ -173,6 +178,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
   }
 
   try {
+    const orderId = `PP-${Date.now().toString(36).toUpperCase()}`;
     const lineItems = items.map((item) => {
       const addonText = item.addons?.length ? ` (${item.addons.join(', ')})` : '';
       return {
@@ -195,12 +201,12 @@ app.post('/api/create-checkout-session', async (req, res) => {
       success_url: `${SITE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/cancel.html`,
       metadata: {
+        order_id: orderId,
         customer_name: customer.name || '',
         order_total: String(total),
       },
     });
 
-    const orderId = `PP-${Date.now().toString(36).toUpperCase()}`;
     db.prepare(
       'INSERT INTO orders (id, customer_name, customer_email, items, total, status) VALUES (?, ?, ?, ?, ?, ?)'
     ).run(orderId, customer.name || '', customer.email, JSON.stringify(items), total, 'pending_payment');
@@ -251,6 +257,8 @@ app.get('/api/health', (_, res) => {
     status: 'ok',
     service: 'pocket-planter-api',
     stripe: stripe ? 'ready' : stripeKey ? 'invalid_key' : 'not_configured',
+    webhook: process.env.STRIPE_WEBHOOK_SECRET ? 'configured' : 'not_configured',
+    siteUrl: SITE_URL,
   });
 });
 

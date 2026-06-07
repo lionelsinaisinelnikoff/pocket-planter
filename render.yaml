@@ -10,8 +10,10 @@ services:
       - key: NODE_VERSION
         value: "20"
       - key: SITE_URL
-        value: https://www.pocket-planter.com
+        value: https://pocket-planter.com
       - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
         sync: false
       - key: JWT_SECRET
         generateValue: true

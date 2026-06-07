@@ -384,7 +384,7 @@
 
   <div class="toast" id="toast" hidden></div>
   <script>
-    if (location.hostname.endsWith('github.io') || location.hostname.endsWith('pocket-planter.com')) {
+    if (location.hostname !== 'localhost') {
       window.PP_API_BASE = 'https://pocket-planter-api.onrender.com';
     }
   </script>

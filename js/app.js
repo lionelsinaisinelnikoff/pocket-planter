@@ -1,6 +1,8 @@
 /* Pocket Planter — Rafael's Inspirational Journey + Stripe */
 
-const API_BASE = (window.location.port === '3000' || window.location.hostname === 'localhost') ? '' : (window.PP_API_BASE || '');
+const API_BASE = (window.location.port === '3000' || window.location.hostname === 'localhost')
+  ? ''
+  : (window.PP_API_BASE || 'https://pocket-planter-api.onrender.com');
 
 const PRODUCT_IMAGES = [
   { src: 'assets/images/IMG_4270.jpg', alt: 'Pocket Planter in hand' },
