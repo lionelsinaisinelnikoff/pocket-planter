@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pocket Planter — plant seeds anywhere with a fun PEZ-style dispenser and water squirter. From Pocket to Plant.">
+  <title>Pocket Planter — From Pocket to Plant</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="page-loader" id="pageLoader" aria-hidden="true">
+    <img src="assets/logo.svg" alt="" class="loader-logo">
+    <div class="loader-bar"><span></span></div>
+  </div>
+
+  <header class="site-header" id="header">
+    <nav class="nav container">
+      <a href="#" class="nav-brand">
+        <img src="assets/logo.svg" alt="Pocket Planter logo" width="36" height="36">
+        <span>Pocket Planter</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#story">Story</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#shop">Shop</a></li>
+      </ul>
+      <button class="cart-btn" id="cartBtn" aria-label="Open cart">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content container">
+        <div class="hero-text reveal">
+          <p class="eyebrow">From Pocket — To Plant</p>
+          <h1>Plant seeds <em>anywhere</em> with Pocket Planter</h1>
+          <p class="hero-desc">A fun, pocket-sized tool that combines a PEZ-style seed dispenser with a water squirter — made for curious kids aged 5–16.</p>
+          <div class="hero-actions">
+            <a href="#shop" class="btn btn-primary">Shop Now — 28 AED</a>
+            <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <strong>4</strong>
+              <span>Easy steps</span>
+            </div>
+            <div class="stat">
+              <strong>28</strong>
+              <span>AED per kit</span>
+            </div>
+            <div class="stat">
+              <strong>5–16</strong>
+              <span>Ages</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-visual reveal">
+          <div class="hero-card">
+            <img src="assets/images/IMG_4270.jpg" alt="Pocket Planter product in hand" class="hero-product-img" id="heroImg">
+            <div class="hero-badge">
+              <img src="assets/logo.svg" alt="" width="28" height="28">
+              <div>
+                <strong>Pocket Planter</strong>
+                <span>Seed + Water in one</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <section class="story section" id="story">
+      <div class="container">
+        <div class="story-grid">
+          <div class="story-problem reveal">
+            <span class="section-tag">The Dilemma</span>
+            <h2>Tree planting is slowing down</h2>
+            <p>While eating watermelon, Rafael spat out the seeds and realized they could grow into something amazing. But across the world, tree planting rates have been falling for decades — and kids rarely get hands-on tools to help.</p>
+            <div class="chart-card">
+              <p class="chart-label">UK tree planting (hectares/year)</p>
+              <div class="chart-bars">
+                <div class="bar" style="--h: 100%"><span>1980s</span><em>30k</em></div>
+                <div class="bar" style="--h: 67%"><span>1990s</span><em>20k</em></div>
+                <div class="bar" style="--h: 33%"><span>2000s</span><em>10k</em></div>
+                <div class="bar bar--danger" style="--h: 7%"><span>2010s</span><em>2k</em></div>
+              </div>
+            </div>
+          </div>
+          <div class="story-solution reveal">
+            <span class="section-tag section-tag--green">My Solution</span>
+            <h2>The Pocket Planter</h2>
+            <p>A tiny, easy tool that works like a mix between a PEZ dispenser and a water squirter — letting you plant seeds anywhere you find soil.</p>
+            <ul class="feature-list">
+              <li>
+                <span class="feature-icon">🌱</span>
+                <div>
+                  <strong>PEZ-style seed dispenser</strong>
+                  <p>Shake, lift, and drop seeds precisely where you want them.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feature-icon">💧</span>
+                <div>
+                  <strong>Built-in water squirter</strong>
+                  <p>Hydrate your seed instantly — no watering can needed.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feature-icon">🪵</span>
+                <div>
+                  <strong>Digging stick included</strong>
+                  <p>Everything you need fits right in your pocket.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works section section--alt" id="how-it-works">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-tag">How It Works</span>
+          <h2>Four steps to grow</h2>
+          <p>Simple enough for a 5-year-old. Smart enough to actually work.</p>
+        </div>
+        <div class="steps" id="steps">
+          <article class="step reveal" data-step="1">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <h3>Fill the dispenser</h3>
+              <p>Make sure the seed dispenser is loaded with your customised seeds.</p>
+            </div>
+          </article>
+          <article class="step reveal" data-step="2">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <h3>Dig a hole</h3>
+              <p>Use the included stick to dig a small hole in any bed of soil you see.</p>
+            </div>
+          </article>
+          <article class="step reveal" data-step="3">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <h3>Dispense the seed</h3>
+              <p>Give a nice shake, lift open the head of the PEZ, and drop your seed in.</p>
+            </div>
+          </article>
+          <article class="step reveal" data-step="4">
+            <div class="step-num">04</div>
+            <div class="step-body">
+              <h3>Hydrate &amp; grow</h3>
+              <p>Squirt some fertilised water to hydrate your seed — then watch it grow!</p>
+            </div>
+          </article>
+        </div>
+        <div class="steps-progress" aria-hidden="true">
+          <div class="steps-progress-fill" id="stepsProgress"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery section" id="gallery">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-tag">Gallery</span>
+          <h2>See it in action</h2>
+        </div>
+        <div class="gallery-grid reveal" id="galleryGrid">
+          <!-- populated by JS -->
+        </div>
+        <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+          <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+          <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+          <img src="" alt="" id="lightboxImg">
+          <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="shop section section--alt" id="shop">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="section-tag">Shop</span>
+          <h2>Get your Pocket Planter</h2>
+          <p>Start with the kit, then add customised seeds and fertilised water.</p>
+        </div>
+        <div class="shop-grid">
+          <div class="product-card reveal" id="productCard">
+            <div class="product-gallery">
+              <div class="product-main-img">
+                <img src="assets/images/IMG_4217.jpg" alt="Pocket Planter kit" id="productMainImg">
+              </div>
+              <div class="product-thumbs" id="productThumbs">
+                <!-- populated by JS -->
+              </div>
+            </div>
+            <div class="product-info">
+              <h3>Pocket Planter Kit</h3>
+              <p class="product-tagline">From Pocket — To Plant</p>
+              <div class="product-price">
+                <span class="price-amount" id="totalPrice">28</span>
+                <span class="price-currency">AED</span>
+              </div>
+              <p class="product-desc">Includes the PEZ-style seed dispenser, water pump system, digging stick, and pocket planter body. Ready to plant anywhere.</p>
+
+              <div class="addons" id="addons">
+                <label class="addon">
+                  <input type="checkbox" name="addon" value="seeds" data-price="5">
+                  <span class="addon-check"></span>
+                  <span class="addon-info">
+                    <strong>Customised Seeds</strong>
+                    <span>+5 AED</span>
+                  </span>
+                </label>
+                <label class="addon">
+                  <input type="checkbox" name="addon" value="water" data-price="5">
+                  <span class="addon-check"></span>
+                  <span class="addon-info">
+                    <strong>Fertilised Water</strong>
+                    <span>+5 AED</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="qty-row">
+                <label for="qty">Quantity</label>
+                <div class="qty-control">
+                  <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">−</button>
+                  <input type="number" id="qty" value="1" min="1" max="10" aria-label="Quantity">
+                  <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-full" id="addToCart">Add to Cart</button>
+
+              <div class="product-breakdown">
+                <h4>What's inside</h4>
+                <ul>
+                  <li><span>PEZ dispenser system</span><em>8 AED value</em></li>
+                  <li><span>Water pump system</span><em>3 AED value</em></li>
+                  <li><span>Stick &amp; plastic body</span><em>2 AED value</em></li>
+                  <li><span>Assembly &amp; design</span><em>5 AED value</em></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="founder section">
+      <div class="container">
+        <div class="founder-card reveal">
+          <div class="founder-badge">FOUNDER</div>
+          <h2>Rafael Sinai-Sinelnikoff</h2>
+          <p class="founder-school">AAESS 7B — 2025/26</p>
+          <p>Invented the Pocket Planter after discovering that everyday seeds — like those from a watermelon — could grow into something extraordinary. Now building a tool that puts planting power in every kid's pocket.</p>
+          <a href="mailto:rafael@students.aaess.sch.ae" class="founder-email">rafael@students.aaess.sch.ae</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="" width="32" height="32">
+        <span>Pocket Planter</span>
+      </div>
+      <p>&copy; 2026 Pocket Planter. From Pocket — To Plant.</p>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div class="cart-overlay" id="cartOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping cart" hidden>
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="cart-close" id="cartClose" aria-label="Close cart">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <p class="cart-empty" id="cartEmpty">Your cart is empty. Add a Pocket Planter!</p>
+    </div>
+    <div class="cart-footer" id="cartFooter" hidden>
+      <div class="cart-total">
+        <span>Total</span>
+        <strong><span id="cartTotal">0</span> AED</strong>
+      </div>
+      <button class="btn btn-primary btn-full" id="checkoutBtn">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkoutOverlay" hidden></div>
+  <div class="modal" id="checkoutModal" role="dialog" aria-labelledby="checkoutTitle" hidden>
+    <button class="modal-close" id="checkoutClose" aria-label="Close">&times;</button>
+    <h2 id="checkoutTitle">Complete Your Order</h2>
+    <p class="modal-sub">We'll confirm your order by email. Payment on delivery.</p>
+    <form id="checkoutForm">
+      <div class="form-group">
+        <label for="customerName">Full Name</label>
+        <input type="text" id="customerName" required placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label for="customerEmail">Email</label>
+        <input type="email" id="customerEmail" required placeholder="you@email.com">
+      </div>
+      <div class="form-group">
+        <label for="customerSchool">School / Organisation (optional)</label>
+        <input type="text" id="customerSchool" placeholder="e.g. AAESS">
+      </div>
+      <div class="form-group">
+        <label for="customerNotes">Notes (optional)</label>
+        <textarea id="customerNotes" rows="2" placeholder="Delivery instructions, seed preferences…"></textarea>
+      </div>
+      <div class="checkout-summary" id="checkoutSummary"></div>
+      <button type="submit" class="btn btn-primary btn-full">Place Order — <span id="checkoutTotal">0</span> AED</button>
+    </form>
+  </div>
+
+  <!-- Order Success -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
