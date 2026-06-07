@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pocket Planter — carry a forest in your pocket. Plant seeds anywhere. From Pocket to Plant.">
+  <meta name="description" content="Pocket Planter — Rafael's journey from one watermelon seed to a pocket-sized mission to plant hope anywhere. From Pocket to Plant.">
   <title>Pocket Planter — From Pocket to Plant</title>
   <link rel="icon" type="image/png" href="assets/logo.png">
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -47,14 +47,15 @@
     <div class="loader-bar"><span></span></div>
   </div>
 
-  <header class="bg-background border-b border-outline-variant fixed top-0 left-0 right-0 z-50 h-16 flex items-center" id="header">
+  <header class="bg-background/90 backdrop-blur-sm border-b border-outline-variant fixed top-0 left-0 right-0 z-50 h-16 flex items-center" id="header">
     <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
       <a href="#hero" class="flex items-center gap-3">
         <img alt="Pocket Planter" class="h-10 w-10 object-contain" src="assets/logo.svg">
         <span class="text-headline-md font-bold text-primary hidden sm:inline">Pocket Planter</span>
       </a>
       <nav class="hidden md:flex items-center gap-8 text-body-md">
-        <a href="#story" class="nav-link">Story</a>
+        <a href="#story" class="nav-link">Rafael's Story</a>
+        <a href="#mission" class="nav-link">Mission</a>
         <a href="#how-it-works" class="nav-link">How It Works</a>
         <a href="#shop" class="nav-link">Shop</a>
       </nav>
@@ -69,7 +70,8 @@
       </div>
     </div>
     <div class="mobile-nav hidden md:hidden" id="mobileNav">
-      <a href="#story">Story</a>
+      <a href="#story">Rafael's Story</a>
+      <a href="#mission">Mission</a>
       <a href="#how-it-works">How It Works</a>
       <a href="#shop">Shop</a>
     </div>
@@ -78,174 +80,267 @@
   <main class="pt-16 pb-24 md:pb-8 overflow-x-hidden">
 
     <!-- Hero -->
-    <section class="relative px-gutter py-16 md:py-20 text-center overflow-hidden" id="hero">
+    <section class="hero-section relative px-gutter py-20 md:py-28 text-center overflow-hidden" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
       <div class="absolute -top-10 -left-10 w-40 h-40 bg-secondary-container/30 organic-blob"></div>
       <div class="absolute -bottom-10 -right-10 w-60 h-60 bg-primary-container/20 organic-blob"></div>
-      <div class="relative z-10 max-w-2xl mx-auto space-y-6 reveal">
+      <div class="relative z-10 max-w-3xl mx-auto space-y-6 reveal">
         <div class="flex justify-center">
-          <div class="p-4 bg-white rounded-full shadow-lg border-2 border-primary/10">
+          <div class="p-4 bg-white/90 rounded-full shadow-lg border-2 border-primary/10">
             <img alt="" class="w-20 h-20 object-contain" src="assets/logo.svg">
           </div>
         </div>
         <p class="text-label-bold text-primary tracking-widest uppercase" id="heroEyebrow">From Pocket — To Plant</p>
         <h1 class="text-headline-xl-mobile md:text-headline-xl font-extrabold text-primary tracking-tight leading-tight" id="heroTitle">
-          Carry a forest<br><span class="text-secondary">in your pocket</span>
+          One seed.<br>One walk.<br><span class="text-secondary">A forest waiting to grow.</span>
         </h1>
-        <p class="text-body-lg text-on-surface-variant max-w-lg mx-auto leading-relaxed" id="heroSubtitle">
-          Every seed holds a future. Pocket Planter puts the power to grow life right in your hands — wherever you walk, wherever wonder finds you.
+        <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto leading-relaxed" id="heroSubtitle">
+          It began with Rafael, a watermelon, and a question no one had asked: <em>what if every child could carry the power to plant hope — anywhere they walk?</em>
         </p>
-        <a href="#shop" class="inline-flex bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg hover:opacity-90 transition-all items-center gap-2 pressable" id="heroCta">
-          Begin Your Journey <span class="material-symbols-outlined text-lg">arrow_forward</span>
+        <a href="#story" class="inline-flex bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg hover:opacity-90 transition-all items-center gap-2 pressable" id="heroCta">
+          Read Rafael's Journey <span class="material-symbols-outlined text-lg">arrow_forward</span>
         </a>
       </div>
     </section>
 
-    <!-- Story -->
+    <!-- Rafael's Story -->
     <section class="px-gutter py-16 max-w-container-max mx-auto" id="story">
       <div class="text-center mb-12 reveal">
-        <h2 class="text-headline-lg text-primary mb-4">The Story</h2>
-        <p class="text-body-lg text-on-surface-variant max-w-xl mx-auto italic" id="storyLead">
-          It started with one seed — and one moment of wonder.
+        <p class="text-label-bold text-primary tracking-widest uppercase mb-3">Chapter One</p>
+        <h2 class="text-headline-lg text-primary mb-4">Rafael's Story</h2>
+        <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto italic" id="storyLead">
+          While eating watermelon, Rafael spat out a seed — and saw not waste, but a world waiting to be born.
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8 items-center reveal">
+      <div class="grid md:grid-cols-2 gap-10 items-center reveal mb-16">
         <div class="rounded-2xl overflow-hidden shadow-xl border-4 border-primary/10">
-          <video class="w-full aspect-video object-cover" autoplay muted loop playsinline poster="assets/videos/posters/plant-anywhere.jpg">
-            <source src="assets/videos/plant-anywhere.mp4" type="video/mp4">
+          <video class="w-full aspect-video object-cover" autoplay muted loop playsinline poster="assets/videos/posters/story-spark.jpg">
+            <source src="assets/videos/story-spark.mp4" type="video/mp4">
           </video>
         </div>
         <div class="space-y-6">
-          <p class="text-body-lg text-on-surface-variant leading-relaxed" id="storyBody">
-            While eating watermelon, Rafael spat out a seed and saw not waste, but possibility — a tiny promise of green in a world that needs it more than ever. Trees are disappearing. Kids are losing touch with the earth beneath their feet. One seed became a question: <em>what if planting could be as easy as taking a walk?</em>
+          <div class="story-quote">
+            <span class="material-symbols-outlined text-primary text-3xl">format_quote</span>
+            <p class="text-body-lg text-on-surface leading-relaxed" id="storyBody">
+              Rafael Sinai-Sinelnikoff was eating watermelon when he spat out the seeds. Most people would have looked away. Rafael looked closer. He realised those tiny seeds could grow into something amazing — trees, shade, life — if only planting were as simple as taking a walk.
+            </p>
+          </div>
+          <p class="text-body-lg text-on-surface-variant leading-relaxed" id="storyBody2">
+            That single moment became a mission. A student at AAESS, building his Pocket Planter through Ylab's Design &amp; Technology programme, Rafael asked a bigger question: <em>why should reforestation belong only to experts with shovels and trucks?</em> What if every child aged 5 to 16 could become a gardener of tomorrow — seeds in one pocket, water in the other, the whole world as their garden?
           </p>
-          <p class="text-body-lg text-on-surface leading-relaxed" id="storyBody2">
-            Pocket Planter was born from that spark. A pocket-sized revolution that turns every child into a gardener, every path into potential soil, and every ordinary day into an act of hope. Seeds in one hand. Water in the other. The whole world waiting to grow.
+          <p class="text-body-md text-on-surface-variant leading-relaxed" id="storyBody3">
+            Pocket Planter was born from that spark — a pocket-sized revolution mixing the joy of a PEZ dispenser with the care of a water squirter. Fun, easy, and ready for any patch of soil you pass on your journey.
           </p>
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-secondary-container rounded-xl p-5 text-center">
-              <span class="material-symbols-outlined text-primary text-3xl">eco</span>
-              <p class="text-label-bold text-on-secondary-container mt-2">Seeds on the go</p>
+        </div>
+      </div>
+
+      <!-- Journey timeline -->
+      <div class="journey-timeline reveal" id="journey">
+        <div class="journey-step">
+          <div class="journey-icon"><span class="material-symbols-outlined">watermelon</span></div>
+          <h3>The Spark</h3>
+          <p>One watermelon seed, spit out without thinking — and a flash of wonder that changed everything.</p>
+        </div>
+        <div class="journey-step">
+          <div class="journey-icon"><span class="material-symbols-outlined">lightbulb</span></div>
+          <h3>The Question</h3>
+          <p>What if planting seeds could be as natural as breathing — anywhere, anytime, by anyone?</p>
+        </div>
+        <div class="journey-step">
+          <div class="journey-icon"><span class="material-symbols-outlined">build</span></div>
+          <h3>The Build</h3>
+          <p>Months of prototyping in D&amp;T: a seed dispenser, a digging stick, a water pump — all in one pocket tool.</p>
+        </div>
+        <div class="journey-step">
+          <div class="journey-icon"><span class="material-symbols-outlined">public</span></div>
+          <h3>The Mission</h3>
+          <p>Turn every walk into an act of hope. Partner with schools. Plant a generation of guardians for our planet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission -->
+    <section class="px-gutter py-16 bg-surface-container-low" id="mission">
+      <div class="max-w-container-max mx-auto">
+        <div class="grid md:grid-cols-2 gap-10 items-center reveal">
+          <div class="space-y-6">
+            <p class="text-label-bold text-primary tracking-widest uppercase">Our Mission</p>
+            <h2 class="text-headline-lg text-primary" id="missionTitle">Because the world is losing its green</h2>
+            <p class="text-body-lg text-on-surface-variant leading-relaxed" id="missionBody">
+              Forests are disappearing. Tree-planting rates are falling. Children are growing up further from the soil beneath their feet. The UAE has set ambitious targets — 75 million mangroves, 1.5 million hectares of forest. The world needs 1.5 billion hectares restored. One pocket cannot fix the planet alone. But a million pockets can.
+            </p>
+            <p class="text-body-lg text-on-surface leading-relaxed" id="missionBody2">
+              Pocket Planter is Rafael's answer: a fun, easy tool that turns reforestation into an adventure kids actually want to join. Plant on the way to school. Plant in the park. Plant wherever life finds a patch of earth. Every seed is a promise to the future.
+            </p>
+            <div class="mission-stats">
+              <div class="mission-stat">
+                <span class="mission-stat-num">5–16</span>
+                <span class="mission-stat-label">Ages we inspire</span>
+              </div>
+              <div class="mission-stat">
+                <span class="mission-stat-num">4</span>
+                <span class="mission-stat-label">Simple steps to plant</span>
+              </div>
+              <div class="mission-stat">
+                <span class="mission-stat-num">∞</span>
+                <span class="mission-stat-label">Places to grow hope</span>
+              </div>
             </div>
-            <div class="bg-secondary-container rounded-xl p-5 text-center">
-              <span class="material-symbols-outlined text-primary text-3xl">water_drop</span>
-              <p class="text-label-bold text-on-secondary-container mt-2">Water built in</p>
-            </div>
+          </div>
+          <div class="rounded-2xl overflow-hidden shadow-xl border-4 border-primary/10">
+            <video class="w-full aspect-video object-cover" autoplay muted loop playsinline poster="assets/videos/posters/mission-forest.jpg">
+              <source src="assets/videos/mission-forest.mp4" type="video/mp4">
+            </video>
           </div>
         </div>
       </div>
     </section>
 
     <!-- How It Works -->
-    <section class="px-gutter py-16 bg-surface-container-low" id="how-it-works">
+    <section class="px-gutter py-16" id="how-it-works">
       <div class="max-w-container-max mx-auto">
         <div class="text-center mb-12 reveal">
+          <p class="text-label-bold text-primary tracking-widest uppercase mb-3">Chapter Two</p>
           <h2 class="text-headline-lg text-primary mb-3">How It Works</h2>
-          <p class="text-body-lg text-on-surface-variant max-w-md mx-auto" id="stepsIntro">
-            Three simple moves. One living miracle.
+          <p class="text-body-lg text-on-surface-variant max-w-xl mx-auto" id="stepsIntro">
+            Four simple moves. One living miracle. From pocket to plant in under a minute.
           </p>
         </div>
-        <div class="grid md:grid-cols-3 gap-6" id="steps">
-          <article class="step-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-primary text-center reveal" data-step="1">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="steps">
+          <article class="step-card bg-white rounded-2xl p-6 shadow-sm border-t-4 border-primary text-center reveal" data-step="1">
             <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl mx-auto mb-5">1</div>
-            <h3 class="text-headline-md text-primary mb-3">Load Your Dreams</h3>
-            <p class="text-body-md text-on-surface-variant">Fill the dispenser with seeds you believe in — watermelon, wildflower, or whatever makes your heart beat faster.</p>
+            <h3 class="text-headline-md text-primary mb-3">Fill Your Dreams</h3>
+            <p class="text-body-md text-on-surface-variant">Make sure the seed dispenser is full — watermelon, wildflower, or whatever seed your heart chooses.</p>
           </article>
-          <article class="step-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-primary text-center reveal" data-step="2">
+          <article class="step-card bg-white rounded-2xl p-6 shadow-sm border-t-4 border-primary text-center reveal" data-step="2">
             <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl mx-auto mb-5">2</div>
-            <h3 class="text-headline-md text-primary mb-3">Plant With Purpose</h3>
-            <p class="text-body-md text-on-surface-variant">Dig a small hole with your stick, give a shake, and drop one perfect seed exactly where life should begin.</p>
+            <h3 class="text-headline-md text-primary mb-3">Dig With Purpose</h3>
+            <p class="text-body-md text-on-surface-variant">Use the built-in stick to dig a small hole in any bed of soil you find along your path.</p>
           </article>
-          <article class="step-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-primary text-center reveal" data-step="3">
+          <article class="step-card bg-white rounded-2xl p-6 shadow-sm border-t-4 border-primary text-center reveal" data-step="3">
             <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl mx-auto mb-5">3</div>
+            <h3 class="text-headline-md text-primary mb-3">Drop One Seed</h3>
+            <p class="text-body-md text-on-surface-variant">Give a nice shake and lift open the head — one perfect seed drops exactly where life should begin.</p>
+          </article>
+          <article class="step-card bg-white rounded-2xl p-6 shadow-sm border-t-4 border-primary text-center reveal" data-step="4">
+            <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl mx-auto mb-5">4</div>
             <h3 class="text-headline-md text-primary mb-3">Give It Life</h3>
-            <p class="text-body-md text-on-surface-variant">A splash of water. A breath of patience. Walk away knowing you just changed the world — one seed at a time.</p>
+            <p class="text-body-md text-on-surface-variant">Squirt water to hydrate your seed. Walk away knowing you just planted hope for tomorrow.</p>
           </article>
         </div>
-        <div class="mt-10 rounded-2xl overflow-hidden shadow-xl reveal max-w-2xl mx-auto">
-          <video class="w-full aspect-video object-cover" controls playsinline poster="assets/videos/posters/seed-sprout.jpg">
-            <source src="assets/videos/seed-sprout.mp4" type="video/mp4">
-          </video>
+
+        <div class="mt-12 video-showcase reveal">
+          <div class="video-featured">
+            <video class="video-player" id="featuredVideo" controls playsinline poster="assets/videos/posters/plant-anywhere.jpg">
+              <source src="assets/videos/plant-anywhere.mp4" type="video/mp4">
+            </video>
+            <div class="video-featured-info">
+              <h3 class="text-headline-md text-primary" id="featuredVideoTitle">Plant Anywhere</h3>
+              <p class="text-body-md text-on-surface-variant" id="featuredVideoDesc">Turn every walk into a planting adventure — school paths, parks, gardens, anywhere soil meets sunlight.</p>
+            </div>
+          </div>
+          <div class="video-thumbs" id="videoThumbs">
+            <button class="video-thumb active" data-src="assets/videos/plant-anywhere.mp4" data-poster="assets/videos/posters/plant-anywhere.jpg" data-title="Plant Anywhere" data-desc="Turn every walk into a planting adventure — school paths, parks, gardens, anywhere soil meets sunlight.">
+              <img class="video-thumb-poster" src="assets/videos/posters/plant-anywhere.jpg" alt="">
+              <div class="video-thumb-info"><h4>Plant Anywhere</h4><p>Your pocket, your garden</p></div>
+              <span class="material-symbols-outlined video-thumb-play">play_circle</span>
+            </button>
+            <button class="video-thumb" data-src="assets/videos/seed-sprout.mp4" data-poster="assets/videos/posters/seed-sprout.jpg" data-title="Watch It Grow" data-desc="A single seed. A splash of water. Patience. Then — life breaks through the soil and reaches for the sun.">
+              <img class="video-thumb-poster" src="assets/videos/posters/seed-sprout.jpg" alt="">
+              <div class="video-thumb-info"><h4>Watch It Grow</h4><p>From seed to sprout</p></div>
+              <span class="material-symbols-outlined video-thumb-play">play_circle</span>
+            </button>
+            <button class="video-thumb" data-src="assets/videos/walk-garden.mp4" data-poster="assets/videos/posters/walk-garden.jpg" data-title="Walk the Garden" data-desc="Every path becomes a story. Every planted seed becomes a memory. This is Rafael's vision — a greener world, one step at a time.">
+              <img class="video-thumb-poster" src="assets/videos/posters/walk-garden.jpg" alt="">
+              <div class="video-thumb-info"><h4>Walk the Garden</h4><p>A journey of hope</p></div>
+              <span class="material-symbols-outlined video-thumb-play">play_circle</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Shop -->
-    <section class="px-gutter py-16 max-w-container-max mx-auto" id="shop">
-      <div class="text-center mb-10 reveal">
-        <h2 class="text-headline-lg text-primary mb-3">Shop</h2>
-        <p class="text-body-lg text-on-surface-variant max-w-lg mx-auto" id="shopIntro">
-          Your pocket holds more than you think. Take the first step — plant something beautiful today.
-        </p>
-      </div>
+    <section class="px-gutter py-16 bg-surface-container-low" id="shop">
+      <div class="max-w-container-max mx-auto">
+        <div class="text-center mb-10 reveal">
+          <p class="text-label-bold text-primary tracking-widest uppercase mb-3">Join the Journey</p>
+          <h2 class="text-headline-lg text-primary mb-3">Carry Hope in Your Pocket</h2>
+          <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto" id="shopIntro">
+            Rafael built this for kids who believe one seed can change the world. Now it's your turn. Take the Pocket Planter on your next walk — and leave something beautiful behind.
+          </p>
+        </div>
 
-      <div class="bg-white rounded-2xl shadow-xl border-2 border-primary/5 overflow-hidden reveal" id="productCard">
-        <div class="grid md:grid-cols-2 gap-0">
-          <div class="p-6 bg-surface-container-low">
-            <div class="rounded-xl overflow-hidden shadow-md">
-              <img src="assets/images/IMG_4270.jpg" alt="Pocket Planter" id="productMainImg" class="w-full aspect-square object-cover">
-            </div>
-            <div class="product-thumbs flex gap-2 mt-3" id="productThumbs"></div>
-          </div>
-          <div class="p-6 md:p-8 flex flex-col">
-            <h3 class="text-headline-md text-primary" id="productName">Pocket Planter Kit</h3>
-            <p class="text-label-bold text-on-surface-variant mb-4" id="productTagline">From Pocket — To Plant</p>
-            <div class="flex items-baseline gap-1 mb-4">
-              <span class="text-headline-lg text-primary" id="totalPrice">28</span>
-              <span class="text-body-md text-on-surface-variant">AED</span>
-            </div>
-            <p class="text-body-md text-on-surface-variant mb-6" id="productDesc">
-              Everything you need to turn any walk into a planting adventure — seed dispenser, water squirter, digging stick, all in one pocket-sized tool.
-            </p>
-
-            <div class="space-y-3 mb-6" id="addons">
-              <label class="addon flex items-center gap-3 p-3 rounded-xl border-2 border-outline-variant/50 cursor-pointer">
-                <input type="checkbox" name="addon" value="seeds" data-price="5" class="sr-only">
-                <span class="addon-check w-5 h-5 rounded border-2 border-primary flex-shrink-0"></span>
-                <span class="flex-1 flex justify-between text-body-md">
-                  <strong>Customised Seeds</strong><span class="text-on-surface-variant">+5 AED</span>
-                </span>
-              </label>
-              <label class="addon flex items-center gap-3 p-3 rounded-xl border-2 border-outline-variant/50 cursor-pointer">
-                <input type="checkbox" name="addon" value="water" data-price="5" class="sr-only">
-                <span class="addon-check w-5 h-5 rounded border-2 border-primary flex-shrink-0"></span>
-                <span class="flex-1 flex justify-between text-body-md">
-                  <strong>Fertilised Water</strong><span class="text-on-surface-variant">+5 AED</span>
-                </span>
-              </label>
-            </div>
-
-            <div class="flex items-center justify-between mb-6">
-              <span class="text-label-bold">Quantity</span>
-              <div class="qty-control flex items-center border-2 border-outline-variant rounded-full overflow-hidden">
-                <button type="button" class="qty-btn w-10 h-10 text-primary font-bold" id="qtyMinus">−</button>
-                <input type="number" id="qty" value="1" min="1" max="10" class="w-12 text-center border-0 font-bold bg-transparent">
-                <button type="button" class="qty-btn w-10 h-10 text-primary font-bold" id="qtyPlus">+</button>
+        <div class="bg-white rounded-2xl shadow-xl border-2 border-primary/5 overflow-hidden reveal" id="productCard">
+          <div class="grid md:grid-cols-2 gap-0">
+            <div class="p-6 bg-surface-container-low">
+              <div class="rounded-xl overflow-hidden shadow-md">
+                <img src="assets/images/IMG_4270.jpg" alt="Pocket Planter" id="productMainImg" class="w-full aspect-square object-cover">
               </div>
+              <div class="product-thumbs flex gap-2 mt-3" id="productThumbs"></div>
             </div>
+            <div class="p-6 md:p-8 flex flex-col">
+              <h3 class="text-headline-md text-primary" id="productName">Pocket Planter Kit</h3>
+              <p class="text-label-bold text-on-surface-variant mb-4" id="productTagline">From Pocket — To Plant</p>
+              <div class="flex items-baseline gap-1 mb-4">
+                <span class="text-headline-lg text-primary" id="totalPrice">28</span>
+                <span class="text-body-md text-on-surface-variant">AED</span>
+              </div>
+              <p class="text-body-md text-on-surface-variant mb-6" id="productDesc">
+                Rafael's invention in your hands — a PEZ-style seed dispenser, built-in water squirter, and digging stick, all in one pocket-sized tool. Designed for adventurers aged 5–16 (and the grown-ups who cheer them on).
+              </p>
 
-            <button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg w-full pressable" id="addToCart">
-              Add to Cart
-            </button>
+              <div class="space-y-3 mb-6" id="addons">
+                <label class="addon flex items-center gap-3 p-3 rounded-xl border-2 border-outline-variant/50 cursor-pointer">
+                  <input type="checkbox" name="addon" value="seeds" data-price="5" class="sr-only">
+                  <span class="addon-check w-5 h-5 rounded border-2 border-primary flex-shrink-0"></span>
+                  <span class="flex-1 flex justify-between text-body-md">
+                    <strong>Customised Seeds</strong><span class="text-on-surface-variant">+5 AED</span>
+                  </span>
+                </label>
+                <label class="addon flex items-center gap-3 p-3 rounded-xl border-2 border-outline-variant/50 cursor-pointer">
+                  <input type="checkbox" name="addon" value="water" data-price="5" class="sr-only">
+                  <span class="addon-check w-5 h-5 rounded border-2 border-primary flex-shrink-0"></span>
+                  <span class="flex-1 flex justify-between text-body-md">
+                    <strong>Fertilised Water</strong><span class="text-on-surface-variant">+5 AED</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-between mb-6">
+                <span class="text-label-bold">Quantity</span>
+                <div class="qty-control flex items-center border-2 border-outline-variant rounded-full overflow-hidden">
+                  <button type="button" class="qty-btn w-10 h-10 text-primary font-bold" id="qtyMinus">−</button>
+                  <input type="number" id="qty" value="1" min="1" max="10" class="w-12 text-center border-0 font-bold bg-transparent">
+                  <button type="button" class="qty-btn w-10 h-10 text-primary font-bold" id="qtyPlus">+</button>
+                </div>
+              </div>
+
+              <button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg w-full pressable" id="addToCart">
+                Plant Your First Seed
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="py-8 px-gutter text-center bg-surface-container border-t border-outline-variant">
+  <footer class="py-10 px-gutter text-center bg-surface-container border-t border-outline-variant">
     <div class="flex items-center justify-center gap-2 mb-3">
       <img alt="" class="w-7 h-7 opacity-70" src="assets/logo.svg">
       <span class="font-bold text-primary opacity-70">Pocket Planter</span>
     </div>
-    <p class="text-body-md text-on-surface-variant opacity-70">© 2026 Pocket Planter — From Pocket to Plant</p>
-    <p class="text-sm text-on-surface-variant opacity-50 mt-1">Made with hope by Rafael Sinai-Sinelnikoff</p>
+    <p class="text-body-md text-on-surface-variant opacity-70 max-w-md mx-auto mb-2">From Pocket — To Plant. A mission by Rafael Sinai-Sinelnikoff, built at AAESS through Ylab.</p>
+    <p class="text-body-md text-on-surface-variant opacity-70">© 2026 Pocket Planter</p>
   </footer>
 
   <nav class="bottom-nav md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around py-2 bg-surface shadow-lg rounded-t-xl border-t border-outline-variant" id="bottomNav">
     <a href="#hero" class="bottom-nav-item active" data-section="hero"><span class="material-symbols-outlined">home</span><span class="text-label-bold">Home</span></a>
     <a href="#story" class="bottom-nav-item" data-section="story"><span class="material-symbols-outlined">auto_stories</span><span class="text-label-bold">Story</span></a>
-    <a href="#how-it-works" class="bottom-nav-item" data-section="how-it-works"><span class="material-symbols-outlined">pin</span><span class="text-label-bold">How</span></a>
+    <a href="#mission" class="bottom-nav-item" data-section="mission"><span class="material-symbols-outlined">eco</span><span class="text-label-bold">Mission</span></a>
     <a href="#shop" class="bottom-nav-item" data-section="shop"><span class="material-symbols-outlined">shopping_bag</span><span class="text-label-bold">Shop</span></a>
   </nav>
 
@@ -257,7 +352,7 @@
       <button class="cart-close" id="cartClose">&times;</button>
     </div>
     <div class="cart-items" id="cartItems">
-      <p class="cart-empty" id="cartEmpty">Your cart is empty — plant something today.</p>
+      <p class="cart-empty" id="cartEmpty">Your cart is empty — carry hope in your pocket today.</p>
     </div>
     <div class="cart-footer" id="cartFooter" hidden>
       <div class="cart-total"><span>Total</span><strong><span id="cartTotal">0</span> AED</strong></div>

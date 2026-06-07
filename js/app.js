@@ -1,4 +1,4 @@
-/* Pocket Planter — Simplified Inspirational Site + Stripe */
+/* Pocket Planter — Rafael's Inspirational Journey + Stripe */
 
 const API_BASE = (window.location.port === '3000' || window.location.hostname === 'localhost') ? '' : (window.PP_API_BASE || '');
 
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadCMS();
   initProductGallery();
   initSteps();
+  initVideoThumbs();
   initShop();
   initCart();
   initCheckout();
@@ -36,12 +37,20 @@ async function loadCMS() {
     const res = await fetch(`${API_BASE}/api/content`);
     if (!res.ok) return;
     const c = await res.json();
+    if (c.hero?.eyebrow) $('#heroEyebrow').textContent = c.hero.eyebrow;
     if (c.hero?.title) $('#heroTitle').innerHTML = c.hero.title;
-    if (c.hero?.subtitle) $('#heroSubtitle').textContent = c.hero.subtitle;
-    if (c.hero?.cta) $('#heroCta').innerHTML = `${c.hero.cta} <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
+    if (c.hero?.subtitle) $('#heroSubtitle').innerHTML = c.hero.subtitle;
+    if (c.hero?.cta) {
+      $('#heroCta').innerHTML = `${c.hero.cta} <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
+      $('#heroCta').href = '#story';
+    }
     if (c.story?.lead) $('#storyLead').textContent = c.story.lead;
     if (c.story?.body) $('#storyBody').textContent = c.story.body;
-    if (c.story?.body2) $('#storyBody2').textContent = c.story.body2;
+    if (c.story?.body2) $('#storyBody2').innerHTML = c.story.body2;
+    if (c.story?.body3 && $('#storyBody3')) $('#storyBody3').textContent = c.story.body3;
+    if (c.mission?.title) $('#missionTitle').textContent = c.mission.title;
+    if (c.mission?.body) $('#missionBody').textContent = c.mission.body;
+    if (c.mission?.body2) $('#missionBody2').textContent = c.mission.body2;
     if (c.product) {
       BASE_PRICE = c.product.basePrice || 28;
       if (c.product.name) $('#productName').textContent = c.product.name;
@@ -49,18 +58,19 @@ async function loadCMS() {
       if (c.product.description) $('#productDesc').textContent = c.product.description;
       updatePrice();
     }
-    if (c.steps?.length === 3) renderSteps(c.steps);
+    if (c.steps?.length >= 3) renderSteps(c.steps);
   } catch { /* static fallback */ }
 }
 
 function renderSteps(steps) {
   $('#steps').innerHTML = steps.map((s) => `
-    <article class="step-card bg-white rounded-2xl p-8 shadow-sm border-t-4 border-primary text-center reveal" data-step="${s.num}">
+    <article class="step-card bg-white rounded-2xl p-6 shadow-sm border-t-4 border-primary text-center reveal" data-step="${s.num}">
       <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl mx-auto mb-5">${s.num}</div>
       <h3 class="text-headline-md text-primary mb-3">${s.title}</h3>
       <p class="text-body-md text-on-surface-variant">${s.body}</p>
     </article>
   `).join('');
+  initSteps();
 }
 
 function initLoader() {
@@ -95,6 +105,7 @@ function initLeaves() {
 
 function initProductGallery() {
   const thumbs = $('#productThumbs');
+  if (!thumbs) return;
   PRODUCT_IMAGES.forEach((img, i) => {
     const btn = document.createElement('button');
     btn.className = `product-thumb${i === 0 ? ' active' : ''}`;
@@ -109,10 +120,31 @@ function initProductGallery() {
   });
 }
 
+function initVideoThumbs() {
+  const video = $('#featuredVideo');
+  const thumbs = $$('.video-thumb');
+  if (!video || !thumbs.length) return;
+
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      thumbs.forEach((t) => t.classList.remove('active'));
+      thumb.classList.add('active');
+      const source = video.querySelector('source');
+      if (source) source.src = thumb.dataset.src;
+      else video.src = thumb.dataset.src;
+      video.poster = thumb.dataset.poster;
+      $('#featuredVideoTitle').textContent = thumb.dataset.title;
+      $('#featuredVideoDesc').textContent = thumb.dataset.desc;
+      video.load();
+      video.play();
+    });
+  });
+}
+
 function initSteps() {
   const steps = $$('.step-card');
   const section = $('#how-it-works');
-  if (!steps.length) return;
+  if (!steps.length || !section) return;
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e) => {
       if (!e.isIntersecting) return;
@@ -161,7 +193,7 @@ function addToCart() {
   else cart.push({ id: Date.now(), name: 'Pocket Planter Kit', image: PRODUCT_IMAGES[currentImageIndex].src, addons, unitPrice, qty });
   saveCart();
   updateCartUI();
-  showToast(`Added ${qty} to your cart — let's grow something.`);
+  showToast(`Added ${qty} Pocket Planter${qty > 1 ? 's' : ''} — your journey begins.`);
   openCart();
 }
 
@@ -285,7 +317,7 @@ async function payWithStripe() {
 
 function initBottomNav() {
   const items = $$('.bottom-nav-item');
-  ['hero', 'story', 'how-it-works', 'shop'].forEach((id) => {
+  ['hero', 'story', 'mission', 'shop'].forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
     new IntersectionObserver((entries) => {

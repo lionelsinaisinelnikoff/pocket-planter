@@ -87,6 +87,129 @@ body {
   100% { transform: translateX(350%); }
 }
 
+/* Hero with background image */
+.hero-section {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: url('../assets/images/hero-bg.jpg') center/cover no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(251, 250, 242, 0.88) 0%, rgba(251, 250, 242, 0.75) 50%, rgba(251, 250, 242, 0.95) 100%);
+}
+
+/* Story quote */
+.story-quote {
+  background: #f5f4ec;
+  border-left: 4px solid #006e1c;
+  border-radius: 0 1rem 1rem 0;
+  padding: 1.5rem;
+}
+
+.story-quote .material-symbols-outlined {
+  opacity: 0.4;
+  margin-bottom: 0.5rem;
+}
+
+/* Journey timeline */
+.journey-timeline {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .journey-timeline {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.journey-step {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  border: 2px solid rgba(0, 110, 28, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 110, 28, 0.06);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.journey-step:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 110, 28, 0.12);
+}
+
+.journey-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #b2efa6;
+  color: #006e1c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.journey-icon .material-symbols-outlined {
+  font-size: 1.75rem;
+}
+
+.journey-step h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #006e1c;
+  margin-bottom: 0.5rem;
+}
+
+.journey-step p {
+  font-size: 0.875rem;
+  color: #6f7a6b;
+  line-height: 1.5;
+}
+
+/* Mission stats */
+.mission-stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+}
+
+.mission-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: 2px solid rgba(0, 110, 28, 0.1);
+  min-width: 100px;
+}
+
+.mission-stat-num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #006e1c;
+  line-height: 1;
+}
+
+.mission-stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6f7a6b;
+  margin-top: 0.35rem;
+  text-align: center;
+}
+
 /* Reveal */
 .reveal {
   opacity: 0;
