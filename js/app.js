@@ -68,7 +68,6 @@ async function loadCMS() {
       if (c.product.benefitsParents) renderBenefits('benefitsParents', c.product.benefitsParents);
       updatePrice();
     }
-    if (c.pricing) renderPricing(c.pricing);
     if (c.steps?.length >= 3) renderSteps(c.steps);
   } catch { /* static fallback */ }
 }
@@ -86,34 +85,6 @@ function renderBenefits(id, items) {
   const el = document.getElementById(id);
   if (!el) return;
   el.innerHTML = items.map((t) => `<li>${t}</li>`).join('');
-}
-
-function renderPricing(p) {
-  if (p.intro && $('#pricingIntro')) $('#pricingIntro').textContent = p.intro;
-  if (p.valueLine && $('#pricingValue')) $('#pricingValue').textContent = p.valueLine;
-  if (p.components?.length && $('#pricingTable')) {
-    const rows = p.components.map((c) => `
-      <div class="pricing-row">
-        <span>${c.name}</span>
-        <span>${c.cost} AED</span>
-      </div>
-    `).join('');
-    $('#pricingTable').innerHTML = `
-      ${rows}
-      <div class="pricing-row pricing-row-total">
-        <span>Total cost</span>
-        <span>${p.costTotal} AED</span>
-      </div>
-      <div class="pricing-row pricing-row-margin">
-        <span>Fair margin</span>
-        <span>${p.margin} AED</span>
-      </div>
-      <div class="pricing-row pricing-row-price">
-        <span>Your price</span>
-        <span>${p.price} AED</span>
-      </div>
-    `;
-  }
 }
 
 function renderSteps(steps) {

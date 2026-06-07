@@ -121,13 +121,11 @@
         </div>
 
         <div id="tab-product" class="tab-panel hidden space-y-4">
-          <h2 class="text-xl font-bold text-[#006e1c]">Product &amp; Pricing</h2>
+          <h2 class="text-xl font-bold text-[#006e1c]">Product</h2>
           <input id="prodName" class="cms-input" placeholder="Product name">
           <input id="prodTagline" class="cms-input" placeholder="Tagline">
           <input id="prodPrice" type="number" class="cms-input" placeholder="Base price (AED)">
           <textarea id="prodDesc" rows="3" class="cms-input" placeholder="Description"></textarea>
-          <textarea id="pricingIntro" rows="2" class="cms-input" placeholder="Pricing intro"></textarea>
-          <textarea id="pricingValue" rows="2" class="cms-input" placeholder="Pricing value line"></textarea>
           <button onclick="saveProduct()" class="cms-save">Save Product</button>
         </div>
 
@@ -253,8 +251,6 @@
       prodTagline.value = content.product?.tagline || '';
       prodPrice.value = content.product?.basePrice || '';
       prodDesc.value = content.product?.description || '';
-      pricingIntro.value = content.pricing?.intro || '';
-      pricingValue.value = content.pricing?.valueLine || '';
     }
 
     async function saveHero() {
@@ -287,11 +283,7 @@
 
     async function saveProduct() {
       content.product = { ...content.product, name: prodName.value, tagline: prodTagline.value, basePrice: +prodPrice.value, description: prodDesc.value };
-      content.pricing = { ...content.pricing, intro: pricingIntro.value, valueLine: pricingValue.value };
-      await Promise.all([
-        api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) }),
-        api('/api/content/pricing', { method: 'PUT', body: JSON.stringify(content.pricing) }),
-      ]);
+      await api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) });
       toast();
     }
 

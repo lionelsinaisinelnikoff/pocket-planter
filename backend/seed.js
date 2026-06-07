@@ -61,19 +61,6 @@ const defaultContent = {
       'Transparent pricing — 28 AED, no surprises',
     ],
   },
-  pricing: {
-    intro: "Rafael priced it honestly — 28 AED for the full Pocket Planter kit. Here's exactly what goes into every unit:",
-    costTotal: 18,
-    margin: 10,
-    price: 28,
-    components: [
-      { name: 'PEZ dispenser system', cost: 8 },
-      { name: 'Water pump system', cost: 3 },
-      { name: 'Stick & plastic', cost: 2 },
-      { name: 'Effort', cost: 5 },
-    ],
-    valueLine: "You're not just buying plastic and seeds. You're buying Rafael's design, testing, and belief that kids can help reforest the world — one pocket at a time.",
-  },
   dilemma: {
     body: 'While eating watermelon, I spat out the seeds and realised they could grow into something amazing. Tree planting rates are falling — but one seed in the right pocket could change that. So I created The Pocket Planter: a tiny tool that helps you plant seeds anywhere.',
   },
