@@ -61,19 +61,6 @@ const defaultContent = {
       'Transparent pricing — 28 AED, no surprises',
     ],
   },
-  dilemma: {
-    body: 'While eating watermelon, I spat out the seeds and realised they could grow into something amazing. Tree planting rates are falling — but one seed in the right pocket could change that. So I created The Pocket Planter: a tiny tool that helps you plant seeds anywhere.',
-  },
-  solution: {
-    body: 'To fix this problem, I created The Pocket Planter — a fun, easy tool that works like a mix between a PEZ dispenser and a water squirter, letting you plant seeds anywhere.',
-  },
-  pitch: {
-    equity: '20% equity',
-    funding: '100,000 for development and marketing',
-    email: 'RafaelSinaiSinelnikoff@students.aaess.sch.ae',
-    technical: 'Aid from D&T and media for MVP, pilot and outreach',
-    partnership: 'COGNITA as launch customer and promoter',
-  },
 };
 
 function setContent(key, value) {

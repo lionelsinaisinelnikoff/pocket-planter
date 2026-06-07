@@ -79,14 +79,6 @@
             <input id="shopHeading" placeholder="Heading" class="cms-input">
             <textarea id="shopIntro" placeholder="Intro text" rows="2" class="cms-input"></textarea>
           </div>
-          <div class="space-y-3 p-4 bg-white rounded-xl border">
-            <h3 class="font-bold">The Dilemma / Solution / Pitch</h3>
-            <textarea id="dilemmaBody" rows="2" class="cms-input" placeholder="Dilemma"></textarea>
-            <textarea id="solutionBody" rows="2" class="cms-input" placeholder="Solution"></textarea>
-            <input id="pitchEquity" placeholder="Equity ask" class="cms-input">
-            <input id="pitchFunding" placeholder="Funding amount" class="cms-input">
-            <input id="pitchEmail" placeholder="Email" class="cms-input">
-          </div>
           <button onclick="saveContent()" class="cms-save">Save Content</button>
         </div>
 
@@ -242,11 +234,6 @@
       shopHeading.value = content.shopIntro?.heading || '';
       shopIntro.value = content.shopIntro?.text || '';
       renderStepsEditor(content.steps || []);
-      dilemmaBody.value = content.dilemma?.body || '';
-      solutionBody.value = content.solution?.body || '';
-      pitchEquity.value = content.pitch?.equity || '';
-      pitchFunding.value = content.pitch?.funding || '';
-      pitchEmail.value = content.pitch?.email || '';
       prodName.value = content.product?.name || '';
       prodTagline.value = content.product?.tagline || '';
       prodPrice.value = content.product?.basePrice || '';
@@ -265,18 +252,12 @@
       content.stepsIntro = { text: stepsIntro.value };
       content.shopIntro = { heading: shopHeading.value, text: shopIntro.value };
       content.steps = collectSteps();
-      content.dilemma = { ...content.dilemma, body: dilemmaBody.value };
-      content.solution = { ...content.solution, body: solutionBody.value };
-      content.pitch = { ...content.pitch, equity: pitchEquity.value, funding: pitchFunding.value, email: pitchEmail.value };
       await Promise.all([
         api('/api/content/story', { method: 'PUT', body: JSON.stringify(content.story) }),
         api('/api/content/mission', { method: 'PUT', body: JSON.stringify(content.mission) }),
         api('/api/content/stepsIntro', { method: 'PUT', body: JSON.stringify(content.stepsIntro) }),
         api('/api/content/shopIntro', { method: 'PUT', body: JSON.stringify(content.shopIntro) }),
         api('/api/content/steps', { method: 'PUT', body: JSON.stringify(content.steps) }),
-        api('/api/content/dilemma', { method: 'PUT', body: JSON.stringify(content.dilemma) }),
-        api('/api/content/solution', { method: 'PUT', body: JSON.stringify(content.solution) }),
-        api('/api/content/pitch', { method: 'PUT', body: JSON.stringify(content.pitch) }),
       ]);
       toast();
     }
