@@ -210,6 +210,111 @@ body {
   text-align: center;
 }
 
+/* Product benefits */
+.benefits-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .benefits-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.benefits-card {
+  background: #f5f4ec;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid rgba(0, 110, 28, 0.08);
+}
+
+.benefits-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #006e1c;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.benefits-list li {
+  font-size: 0.875rem;
+  color: #3f4a3c;
+  line-height: 1.45;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.benefits-list li::before {
+  content: '🌱';
+  position: absolute;
+  left: 0;
+  font-size: 0.75rem;
+}
+
+/* Pricing breakdown */
+.pricing-breakdown {
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2rem 1.5rem;
+  border: 2px solid rgba(0, 110, 28, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 110, 28, 0.06);
+}
+
+.pricing-table {
+  max-width: 28rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f5f4ec;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  color: #3f4a3c;
+}
+
+.pricing-row span:last-child {
+  font-weight: 700;
+  color: #006e1c;
+}
+
+.pricing-row-total {
+  background: #efeee6;
+  font-weight: 600;
+}
+
+.pricing-row-margin {
+  background: #e8f5e9;
+}
+
+.pricing-row-price {
+  background: #006e1c;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.0625rem;
+}
+
+.pricing-row-price span {
+  color: #fff !important;
+}
+
 /* Reveal */
 .reveal {
   opacity: 0;

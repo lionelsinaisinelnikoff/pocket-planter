@@ -50,18 +50,70 @@ async function loadCMS() {
     if (c.story?.body) $('#storyBody').textContent = c.story.body;
     if (c.story?.body2) $('#storyBody2').innerHTML = c.story.body2;
     if (c.story?.body3 && $('#storyBody3')) $('#storyBody3').textContent = c.story.body3;
+    if (c.story?.quote && $('#storyQuote')) $('#storyQuote').textContent = c.story.quote;
     if (c.mission?.title) $('#missionTitle').textContent = c.mission.title;
     if (c.mission?.body) $('#missionBody').textContent = c.mission.body;
     if (c.mission?.body2) $('#missionBody2').textContent = c.mission.body2;
+    if (c.mission?.marketLine && $('#missionMarket')) $('#missionMarket').textContent = c.mission.marketLine;
+    if (c.mission?.stats?.length) renderMissionStats(c.mission.stats);
+    if (c.stepsIntro?.text && $('#stepsIntro')) $('#stepsIntro').textContent = c.stepsIntro.text;
+    if (c.shopIntro?.heading && $('#shopHeading')) $('#shopHeading').textContent = c.shopIntro.heading;
+    if (c.shopIntro?.text && $('#shopIntro')) $('#shopIntro').textContent = c.shopIntro.text;
     if (c.product) {
       BASE_PRICE = c.product.basePrice || 28;
       if (c.product.name) $('#productName').textContent = c.product.name;
       if (c.product.tagline) $('#productTagline').textContent = c.product.tagline;
       if (c.product.description) $('#productDesc').textContent = c.product.description;
+      if (c.product.benefitsKids) renderBenefits('benefitsKids', c.product.benefitsKids);
+      if (c.product.benefitsParents) renderBenefits('benefitsParents', c.product.benefitsParents);
       updatePrice();
     }
+    if (c.pricing) renderPricing(c.pricing);
     if (c.steps?.length >= 3) renderSteps(c.steps);
   } catch { /* static fallback */ }
+}
+
+function renderMissionStats(stats) {
+  $('#missionStats').innerHTML = stats.map((s) => `
+    <div class="mission-stat">
+      <span class="mission-stat-num">${s.num}</span>
+      <span class="mission-stat-label">${s.label}</span>
+    </div>
+  `).join('');
+}
+
+function renderBenefits(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = items.map((t) => `<li>${t}</li>`).join('');
+}
+
+function renderPricing(p) {
+  if (p.intro && $('#pricingIntro')) $('#pricingIntro').textContent = p.intro;
+  if (p.valueLine && $('#pricingValue')) $('#pricingValue').textContent = p.valueLine;
+  if (p.components?.length && $('#pricingTable')) {
+    const rows = p.components.map((c) => `
+      <div class="pricing-row">
+        <span>${c.name}</span>
+        <span>${c.cost} AED</span>
+      </div>
+    `).join('');
+    $('#pricingTable').innerHTML = `
+      ${rows}
+      <div class="pricing-row pricing-row-total">
+        <span>Total cost</span>
+        <span>${p.costTotal} AED</span>
+      </div>
+      <div class="pricing-row pricing-row-margin">
+        <span>Fair margin</span>
+        <span>${p.margin} AED</span>
+      </div>
+      <div class="pricing-row pricing-row-price">
+        <span>Your price</span>
+        <span>${p.price} AED</span>
+      </div>
+    `;
+  }
 }
 
 function renderSteps(steps) {

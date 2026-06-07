@@ -45,8 +45,9 @@
       <main class="flex-1 p-6 max-w-3xl">
         <div id="tab-hero" class="tab-panel space-y-4">
           <h2 class="text-xl font-bold text-[#006e1c]">Hero Section</h2>
-          <div><label class="text-sm font-semibold">Title</label><input id="heroTitle" class="cms-input"></div>
-          <div><label class="text-sm font-semibold">Subtitle</label><textarea id="heroSubtitle" rows="2" class="cms-input"></textarea></div>
+          <div><label class="text-sm font-semibold">Eyebrow</label><input id="heroEyebrow" class="cms-input"></div>
+          <div><label class="text-sm font-semibold">Title (HTML allowed)</label><input id="heroTitle" class="cms-input"></div>
+          <div><label class="text-sm font-semibold">Subtitle (HTML allowed)</label><textarea id="heroSubtitle" rows="3" class="cms-input"></textarea></div>
           <div><label class="text-sm font-semibold">CTA Button</label><input id="heroCta" class="cms-input"></div>
           <button onclick="saveHero()" class="cms-save">Save Hero</button>
         </div>
@@ -54,15 +55,34 @@
         <div id="tab-content" class="tab-panel hidden space-y-6">
           <h2 class="text-xl font-bold text-[#006e1c]">Page Content</h2>
           <div class="space-y-3 p-4 bg-white rounded-xl border">
-            <h3 class="font-bold">The Dilemma</h3>
-            <textarea id="dilemmaBody" rows="3" class="cms-input"></textarea>
+            <h3 class="font-bold">Rafael's Story</h3>
+            <input id="storyLead" placeholder="Lead line" class="cms-input">
+            <textarea id="storyBody" placeholder="Body paragraph 1" rows="3" class="cms-input"></textarea>
+            <textarea id="storyBody2" placeholder="Body paragraph 2 (HTML allowed)" rows="3" class="cms-input"></textarea>
+            <textarea id="storyBody3" placeholder="Body paragraph 3" rows="2" class="cms-input"></textarea>
+            <input id="storyQuote" placeholder="Quote" class="cms-input">
           </div>
           <div class="space-y-3 p-4 bg-white rounded-xl border">
-            <h3 class="font-bold">My Solution</h3>
-            <textarea id="solutionBody" rows="3" class="cms-input"></textarea>
+            <h3 class="font-bold">Mission</h3>
+            <input id="missionTitle" placeholder="Title" class="cms-input">
+            <textarea id="missionBody" placeholder="Body" rows="3" class="cms-input"></textarea>
+            <textarea id="missionBody2" placeholder="Body 2" rows="3" class="cms-input"></textarea>
+            <input id="missionMarket" placeholder="Market line" class="cms-input">
           </div>
           <div class="space-y-3 p-4 bg-white rounded-xl border">
-            <h3 class="font-bold">The Pitch</h3>
+            <h3 class="font-bold">How It Works</h3>
+            <textarea id="stepsIntro" placeholder="Section intro" rows="2" class="cms-input"></textarea>
+            <div id="stepsEditor" class="space-y-2"></div>
+          </div>
+          <div class="space-y-3 p-4 bg-white rounded-xl border">
+            <h3 class="font-bold">Shop Intro</h3>
+            <input id="shopHeading" placeholder="Heading" class="cms-input">
+            <textarea id="shopIntro" placeholder="Intro text" rows="2" class="cms-input"></textarea>
+          </div>
+          <div class="space-y-3 p-4 bg-white rounded-xl border">
+            <h3 class="font-bold">The Dilemma / Solution / Pitch</h3>
+            <textarea id="dilemmaBody" rows="2" class="cms-input" placeholder="Dilemma"></textarea>
+            <textarea id="solutionBody" rows="2" class="cms-input" placeholder="Solution"></textarea>
             <input id="pitchEquity" placeholder="Equity ask" class="cms-input">
             <input id="pitchFunding" placeholder="Funding amount" class="cms-input">
             <input id="pitchEmail" placeholder="Email" class="cms-input">
@@ -101,10 +121,13 @@
         </div>
 
         <div id="tab-product" class="tab-panel hidden space-y-4">
-          <h2 class="text-xl font-bold text-[#006e1c]">Product</h2>
+          <h2 class="text-xl font-bold text-[#006e1c]">Product &amp; Pricing</h2>
           <input id="prodName" class="cms-input" placeholder="Product name">
+          <input id="prodTagline" class="cms-input" placeholder="Tagline">
           <input id="prodPrice" type="number" class="cms-input" placeholder="Base price (AED)">
           <textarea id="prodDesc" rows="3" class="cms-input" placeholder="Description"></textarea>
+          <textarea id="pricingIntro" rows="2" class="cms-input" placeholder="Pricing intro"></textarea>
+          <textarea id="pricingValue" rows="2" class="cms-input" placeholder="Pricing value line"></textarea>
           <button onclick="saveProduct()" class="cms-save">Save Product</button>
         </div>
 
@@ -182,33 +205,79 @@
       });
     });
 
+    function renderStepsEditor(steps = []) {
+      stepsEditor.innerHTML = steps.map((s, i) => `
+        <div class="p-3 bg-[#f5f4ec] rounded-lg space-y-1">
+          <label class="text-xs font-bold text-[#006e1c]">Step ${s.num || i + 1}</label>
+          <input data-step-title="${i}" value="${s.title || ''}" class="cms-input" placeholder="Title">
+          <textarea data-step-body="${i}" rows="2" class="cms-input" placeholder="Body">${s.body || ''}</textarea>
+        </div>
+      `).join('');
+    }
+
+    function collectSteps() {
+      const steps = content.steps || [];
+      return steps.map((s, i) => ({
+        num: s.num || i + 1,
+        title: document.querySelector(`[data-step-title="${i}"]`)?.value || s.title,
+        body: document.querySelector(`[data-step-body="${i}"]`)?.value || s.body,
+      }));
+    }
+
     async function loadContent() {
       const res = await api('/api/content');
       content = await res.json();
-      document.getElementById('heroTitle').value = content.hero?.title || '';
-      document.getElementById('heroSubtitle').value = content.hero?.subtitle || '';
-      document.getElementById('heroCta').value = content.hero?.cta || '';
-      document.getElementById('dilemmaBody').value = content.dilemma?.body || '';
-      document.getElementById('solutionBody').value = content.solution?.body || '';
-      document.getElementById('pitchEquity').value = content.pitch?.equity || '';
-      document.getElementById('pitchFunding').value = content.pitch?.funding || '';
-      document.getElementById('pitchEmail').value = content.pitch?.email || '';
-      document.getElementById('prodName').value = content.product?.name || '';
-      document.getElementById('prodPrice').value = content.product?.basePrice || '';
-      document.getElementById('prodDesc').value = content.product?.description || '';
+      heroEyebrow.value = content.hero?.eyebrow || '';
+      heroTitle.value = content.hero?.title || '';
+      heroSubtitle.value = content.hero?.subtitle || '';
+      heroCta.value = content.hero?.cta || '';
+      storyLead.value = content.story?.lead || '';
+      storyBody.value = content.story?.body || '';
+      storyBody2.value = content.story?.body2 || '';
+      storyBody3.value = content.story?.body3 || '';
+      storyQuote.value = content.story?.quote || '';
+      missionTitle.value = content.mission?.title || '';
+      missionBody.value = content.mission?.body || '';
+      missionBody2.value = content.mission?.body2 || '';
+      missionMarket.value = content.mission?.marketLine || '';
+      stepsIntro.value = content.stepsIntro?.text || '';
+      shopHeading.value = content.shopIntro?.heading || '';
+      shopIntro.value = content.shopIntro?.text || '';
+      renderStepsEditor(content.steps || []);
+      dilemmaBody.value = content.dilemma?.body || '';
+      solutionBody.value = content.solution?.body || '';
+      pitchEquity.value = content.pitch?.equity || '';
+      pitchFunding.value = content.pitch?.funding || '';
+      pitchEmail.value = content.pitch?.email || '';
+      prodName.value = content.product?.name || '';
+      prodTagline.value = content.product?.tagline || '';
+      prodPrice.value = content.product?.basePrice || '';
+      prodDesc.value = content.product?.description || '';
+      pricingIntro.value = content.pricing?.intro || '';
+      pricingValue.value = content.pricing?.valueLine || '';
     }
 
     async function saveHero() {
-      content.hero = { ...content.hero, title: heroTitle.value, subtitle: heroSubtitle.value, cta: heroCta.value };
+      content.hero = { ...content.hero, eyebrow: heroEyebrow.value, title: heroTitle.value, subtitle: heroSubtitle.value, cta: heroCta.value };
       await api('/api/content/hero', { method: 'PUT', body: JSON.stringify(content.hero) });
       toast();
     }
 
     async function saveContent() {
+      content.story = { ...content.story, lead: storyLead.value, body: storyBody.value, body2: storyBody2.value, body3: storyBody3.value, quote: storyQuote.value };
+      content.mission = { ...content.mission, title: missionTitle.value, body: missionBody.value, body2: missionBody2.value, marketLine: missionMarket.value };
+      content.stepsIntro = { text: stepsIntro.value };
+      content.shopIntro = { heading: shopHeading.value, text: shopIntro.value };
+      content.steps = collectSteps();
       content.dilemma = { ...content.dilemma, body: dilemmaBody.value };
       content.solution = { ...content.solution, body: solutionBody.value };
       content.pitch = { ...content.pitch, equity: pitchEquity.value, funding: pitchFunding.value, email: pitchEmail.value };
       await Promise.all([
+        api('/api/content/story', { method: 'PUT', body: JSON.stringify(content.story) }),
+        api('/api/content/mission', { method: 'PUT', body: JSON.stringify(content.mission) }),
+        api('/api/content/stepsIntro', { method: 'PUT', body: JSON.stringify(content.stepsIntro) }),
+        api('/api/content/shopIntro', { method: 'PUT', body: JSON.stringify(content.shopIntro) }),
+        api('/api/content/steps', { method: 'PUT', body: JSON.stringify(content.steps) }),
         api('/api/content/dilemma', { method: 'PUT', body: JSON.stringify(content.dilemma) }),
         api('/api/content/solution', { method: 'PUT', body: JSON.stringify(content.solution) }),
         api('/api/content/pitch', { method: 'PUT', body: JSON.stringify(content.pitch) }),
@@ -217,8 +286,12 @@
     }
 
     async function saveProduct() {
-      content.product = { ...content.product, name: prodName.value, basePrice: +prodPrice.value, description: prodDesc.value };
-      await api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) });
+      content.product = { ...content.product, name: prodName.value, tagline: prodTagline.value, basePrice: +prodPrice.value, description: prodDesc.value };
+      content.pricing = { ...content.pricing, intro: pricingIntro.value, valueLine: pricingValue.value };
+      await Promise.all([
+        api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) }),
+        api('/api/content/pricing', { method: 'PUT', body: JSON.stringify(content.pricing) }),
+      ]);
       toast();
     }
 
