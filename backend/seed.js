@@ -2,6 +2,17 @@ const bcrypt = require('bcryptjs');
 const db = require('./db');
 
 const defaultContent = {
+  nav: {
+    brand: 'Pocket Planter',
+    story: "Rafael's Story",
+    mission: 'Mission',
+    howItWorks: 'How It Works',
+    shop: 'Shop — 28 AED',
+    bottomHome: 'Home',
+    bottomStory: 'Story',
+    bottomMission: 'Mission',
+    bottomShop: 'Shop',
+  },
   hero: {
     eyebrow: 'Presented by Rafael · AAESS 7B',
     title: 'Spat out a seed.<br>Built a pocket-sized<br><span class="text-secondary">forest machine.</span>',

@@ -39,6 +39,7 @@ async function loadCMS() {
     const res = await fetch(`${API_BASE}/api/content`);
     if (!res.ok) return;
     const c = await res.json();
+    if (c.nav) renderNav(c.nav);
     if (c.hero?.eyebrow) $('#heroEyebrow').textContent = c.hero.eyebrow;
     if (c.hero?.title) $('#heroTitle').innerHTML = c.hero.title;
     if (c.hero?.subtitle) $('#heroSubtitle').innerHTML = c.hero.subtitle;
@@ -72,6 +73,14 @@ async function loadCMS() {
     }
     if (c.steps?.length >= 3) renderSteps(c.steps);
   } catch { /* static fallback */ }
+}
+
+function renderNav(nav) {
+  if (nav.brand && $('#navBrand')) $('#navBrand').textContent = nav.brand;
+  $$('[data-nav]').forEach((el) => {
+    const label = nav[el.dataset.nav];
+    if (label) el.textContent = label;
+  });
 }
 
 function renderMissionStats(stats) {

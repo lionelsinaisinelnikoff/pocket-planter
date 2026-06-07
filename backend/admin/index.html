@@ -35,6 +35,7 @@
     <div class="flex">
       <nav class="w-56 bg-white border-r border-[#becab9] min-h-[calc(100vh-56px)] p-4 space-y-1">
         <button data-tab="hero" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-[#b2efa6] text-[#386e34]">Hero</button>
+        <button data-tab="nav" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Navigation</button>
         <button data-tab="content" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Content</button>
         <button data-tab="videos" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Videos</button>
         <button data-tab="gallery" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Gallery</button>
@@ -50,6 +51,27 @@
           <div><label class="text-sm font-semibold">Subtitle (HTML allowed)</label><textarea id="heroSubtitle" rows="3" class="cms-input"></textarea></div>
           <div><label class="text-sm font-semibold">CTA Button</label><input id="heroCta" class="cms-input"></div>
           <button onclick="saveHero()" class="cms-save">Save Hero</button>
+        </div>
+
+        <div id="tab-nav" class="tab-panel hidden space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Navigation</h2>
+          <p class="text-sm text-[#6f7a6b]">Edit menu labels for the header, mobile menu, and bottom navigation.</p>
+          <input id="navBrand" class="cms-input" placeholder="Site name in header">
+          <div class="p-4 bg-white rounded-xl border space-y-3">
+            <h3 class="font-bold">Main Menu (desktop &amp; mobile)</h3>
+            <input id="navStory" class="cms-input" placeholder="Story link">
+            <input id="navMission" class="cms-input" placeholder="Mission link">
+            <input id="navHowItWorks" class="cms-input" placeholder="How It Works link">
+            <input id="navShop" class="cms-input" placeholder="Shop link">
+          </div>
+          <div class="p-4 bg-white rounded-xl border space-y-3">
+            <h3 class="font-bold">Bottom Menu (mobile)</h3>
+            <input id="navBottomHome" class="cms-input" placeholder="Home">
+            <input id="navBottomStory" class="cms-input" placeholder="Story">
+            <input id="navBottomMission" class="cms-input" placeholder="Mission">
+            <input id="navBottomShop" class="cms-input" placeholder="Shop">
+          </div>
+          <button onclick="saveNav()" class="cms-save">Save Navigation</button>
         </div>
 
         <div id="tab-content" class="tab-panel hidden space-y-6">
@@ -227,6 +249,15 @@
     async function loadContent() {
       const res = await api('/api/content');
       content = await res.json();
+      navBrand.value = content.nav?.brand || '';
+      navStory.value = content.nav?.story || '';
+      navMission.value = content.nav?.mission || '';
+      navHowItWorks.value = content.nav?.howItWorks || '';
+      navShop.value = content.nav?.shop || '';
+      navBottomHome.value = content.nav?.bottomHome || '';
+      navBottomStory.value = content.nav?.bottomStory || '';
+      navBottomMission.value = content.nav?.bottomMission || '';
+      navBottomShop.value = content.nav?.bottomShop || '';
       heroEyebrow.value = content.hero?.eyebrow || '';
       heroTitle.value = content.hero?.title || '';
       heroSubtitle.value = content.hero?.subtitle || '';
@@ -256,6 +287,22 @@
 
     function parseBenefits(text) {
       return text.split('\n').map((line) => line.trim()).filter(Boolean);
+    }
+
+    async function saveNav() {
+      content.nav = {
+        brand: navBrand.value.trim() || 'Pocket Planter',
+        story: navStory.value.trim() || "Rafael's Story",
+        mission: navMission.value.trim() || 'Mission',
+        howItWorks: navHowItWorks.value.trim() || 'How It Works',
+        shop: navShop.value.trim() || 'Shop',
+        bottomHome: navBottomHome.value.trim() || 'Home',
+        bottomStory: navBottomStory.value.trim() || 'Story',
+        bottomMission: navBottomMission.value.trim() || 'Mission',
+        bottomShop: navBottomShop.value.trim() || 'Shop',
+      };
+      await api('/api/content/nav', { method: 'PUT', body: JSON.stringify(content.nav) });
+      toast();
     }
 
     async function saveHero() {

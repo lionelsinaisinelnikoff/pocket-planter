@@ -51,13 +51,13 @@
     <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-16">
       <a href="#hero" class="flex items-center gap-3">
         <img alt="Pocket Planter" class="h-10 w-10 object-contain" src="assets/logo.svg">
-        <span class="text-headline-md font-bold text-primary hidden sm:inline">Pocket Planter</span>
+        <span class="text-headline-md font-bold text-primary hidden sm:inline" id="navBrand">Pocket Planter</span>
       </a>
-      <nav class="hidden md:flex items-center gap-8 text-body-md">
-        <a href="#story" class="nav-link">Rafael's Story</a>
-        <a href="#mission" class="nav-link">Mission</a>
-        <a href="#how-it-works" class="nav-link">How It Works</a>
-        <a href="#shop" class="nav-link">Shop — 28 AED</a>
+      <nav class="hidden md:flex items-center gap-8 text-body-md" id="desktopNav">
+        <a href="#story" class="nav-link" data-nav="story">Rafael's Story</a>
+        <a href="#mission" class="nav-link" data-nav="mission">Mission</a>
+        <a href="#how-it-works" class="nav-link" data-nav="howItWorks">How It Works</a>
+        <a href="#shop" class="nav-link" data-nav="shop">Shop — 28 AED</a>
       </nav>
       <div class="flex items-center gap-2">
         <button class="cart-btn" id="cartBtn" aria-label="Open cart">
@@ -70,10 +70,10 @@
       </div>
     </div>
     <div class="mobile-nav hidden md:hidden" id="mobileNav">
-      <a href="#story">Rafael's Story</a>
-      <a href="#mission">Mission</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="#shop">Shop — 28 AED</a>
+      <a href="#story" data-nav="story">Rafael's Story</a>
+      <a href="#mission" data-nav="mission">Mission</a>
+      <a href="#how-it-works" data-nav="howItWorks">How It Works</a>
+      <a href="#shop" data-nav="shop">Shop — 28 AED</a>
     </div>
   </header>
 
@@ -363,10 +363,10 @@
   </footer>
 
   <nav class="bottom-nav md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around py-2 bg-surface shadow-lg rounded-t-xl border-t border-outline-variant" id="bottomNav">
-    <a href="#hero" class="bottom-nav-item active" data-section="hero"><span class="material-symbols-outlined">home</span><span class="text-label-bold">Home</span></a>
-    <a href="#story" class="bottom-nav-item" data-section="story"><span class="material-symbols-outlined">auto_stories</span><span class="text-label-bold">Story</span></a>
-    <a href="#mission" class="bottom-nav-item" data-section="mission"><span class="material-symbols-outlined">eco</span><span class="text-label-bold">Mission</span></a>
-    <a href="#shop" class="bottom-nav-item" data-section="shop"><span class="material-symbols-outlined">shopping_bag</span><span class="text-label-bold">Shop</span></a>
+    <a href="#hero" class="bottom-nav-item active" data-section="hero"><span class="material-symbols-outlined">home</span><span class="text-label-bold" data-nav="bottomHome">Home</span></a>
+    <a href="#story" class="bottom-nav-item" data-section="story"><span class="material-symbols-outlined">auto_stories</span><span class="text-label-bold" data-nav="bottomStory">Story</span></a>
+    <a href="#mission" class="bottom-nav-item" data-section="mission"><span class="material-symbols-outlined">eco</span><span class="text-label-bold" data-nav="bottomMission">Mission</span></a>
+    <a href="#shop" class="bottom-nav-item" data-section="shop"><span class="material-symbols-outlined">shopping_bag</span><span class="text-label-bold" data-nav="bottomShop">Shop</span></a>
   </nav>
 
   <!-- Cart -->
