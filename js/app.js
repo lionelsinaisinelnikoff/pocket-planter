@@ -64,6 +64,8 @@ async function loadCMS() {
       if (c.product.name) $('#productName').textContent = c.product.name;
       if (c.product.tagline) $('#productTagline').textContent = c.product.tagline;
       if (c.product.description) $('#productDesc').textContent = c.product.description;
+      if (c.product.benefitsKidsTitle && $('#benefitsKidsTitle')) $('#benefitsKidsTitle').textContent = c.product.benefitsKidsTitle;
+      if (c.product.benefitsParentsTitle && $('#benefitsParentsTitle')) $('#benefitsParentsTitle').textContent = c.product.benefitsParentsTitle;
       if (c.product.benefitsKids) renderBenefits('benefitsKids', c.product.benefitsKids);
       if (c.product.benefitsParents) renderBenefits('benefitsParents', c.product.benefitsParents);
       updatePrice();

@@ -118,6 +118,16 @@
           <input id="prodTagline" class="cms-input" placeholder="Tagline">
           <input id="prodPrice" type="number" class="cms-input" placeholder="Base price (AED)">
           <textarea id="prodDesc" rows="3" class="cms-input" placeholder="Description"></textarea>
+          <div class="p-4 bg-white rounded-xl border space-y-3">
+            <h3 class="font-bold">For Kids</h3>
+            <input id="benefitsKidsTitle" class="cms-input" placeholder="Section heading (e.g. For Kids)">
+            <textarea id="benefitsKids" rows="4" class="cms-input" placeholder="One benefit per line"></textarea>
+          </div>
+          <div class="p-4 bg-white rounded-xl border space-y-3">
+            <h3 class="font-bold">For Parents</h3>
+            <input id="benefitsParentsTitle" class="cms-input" placeholder="Section heading (e.g. For Parents)">
+            <textarea id="benefitsParents" rows="4" class="cms-input" placeholder="One benefit per line"></textarea>
+          </div>
           <button onclick="saveProduct()" class="cms-save">Save Product</button>
         </div>
 
@@ -238,6 +248,14 @@
       prodTagline.value = content.product?.tagline || '';
       prodPrice.value = content.product?.basePrice || '';
       prodDesc.value = content.product?.description || '';
+      benefitsKidsTitle.value = content.product?.benefitsKidsTitle || 'For Kids';
+      benefitsParentsTitle.value = content.product?.benefitsParentsTitle || 'For Parents';
+      benefitsKids.value = (content.product?.benefitsKids || []).join('\n');
+      benefitsParents.value = (content.product?.benefitsParents || []).join('\n');
+    }
+
+    function parseBenefits(text) {
+      return text.split('\n').map((line) => line.trim()).filter(Boolean);
     }
 
     async function saveHero() {
@@ -263,7 +281,17 @@
     }
 
     async function saveProduct() {
-      content.product = { ...content.product, name: prodName.value, tagline: prodTagline.value, basePrice: +prodPrice.value, description: prodDesc.value };
+      content.product = {
+        ...content.product,
+        name: prodName.value,
+        tagline: prodTagline.value,
+        basePrice: +prodPrice.value,
+        description: prodDesc.value,
+        benefitsKidsTitle: benefitsKidsTitle.value.trim() || 'For Kids',
+        benefitsParentsTitle: benefitsParentsTitle.value.trim() || 'For Parents',
+        benefitsKids: parseBenefits(benefitsKids.value),
+        benefitsParents: parseBenefits(benefitsParents.value),
+      };
       await api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) });
       toast();
     }

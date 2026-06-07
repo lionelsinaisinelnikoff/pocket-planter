@@ -48,6 +48,8 @@ const defaultContent = {
       { id: 'seeds', name: 'Customised Seeds', price: 5, description: 'Pick the seeds that match your adventure.' },
       { id: 'water', name: 'Fertilised Water', price: 5, description: 'Give your seed an extra boost from day one.' },
     ],
+    benefitsKidsTitle: 'For Kids',
+    benefitsParentsTitle: 'For Parents',
     benefitsKids: [
       'Works like a PEZ dispenser — shake, lift, drop one seed',
       'Built-in water squirter to hydrate your seed on the spot',
