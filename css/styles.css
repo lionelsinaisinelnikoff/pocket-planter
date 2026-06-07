@@ -87,22 +87,26 @@ body {
   100% { transform: translateX(350%); }
 }
 
-/* Hero with background image */
+/* Hero with background video */
 .hero-section {
   min-height: 70vh;
   display: flex;
   align-items: center;
 }
 
-.hero-bg {
+.hero-video {
   position: absolute;
   inset: 0;
-  background: url('../assets/images/hero-bg.jpg') center/cover no-repeat;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(180deg, rgba(251, 250, 242, 0.88) 0%, rgba(251, 250, 242, 0.75) 50%, rgba(251, 250, 242, 0.95) 100%);
 }
 
