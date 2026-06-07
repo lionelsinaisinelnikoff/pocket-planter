@@ -288,6 +288,11 @@
   </div>
 
   <div class="toast" id="toast" hidden></div>
+  <script>
+    if (location.hostname.endsWith('github.io')) {
+      window.PP_API_BASE = 'https://pocket-planter-api.onrender.com';
+    }
+  </script>
   <script src="js/app.js"></script>
 </body>
 </html>

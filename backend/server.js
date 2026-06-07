@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -12,8 +13,14 @@ const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'pocket-planter-secret-change-in-production';
 const ROOT = path.join(__dirname, '..');
 const SITE_URL = process.env.SITE_URL || `http://localhost:${PORT}`;
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? require('stripe')(process.env.STRIPE_SECRET_KEY)
+
+function isValidStripeSecretKey(key) {
+  return /^(sk|rk)_(test|live)_/.test(key);
+}
+
+const stripeKey = process.env.STRIPE_SECRET_KEY?.trim();
+const stripe = stripeKey && isValidStripeSecretKey(stripeKey)
+  ? require('stripe')(stripeKey)
   : null;
 
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
@@ -154,9 +161,10 @@ app.delete('/api/gallery/:id', auth, (req, res) => {
 // ─── Stripe Checkout ────────────────────────────────────
 app.post('/api/create-checkout-session', async (req, res) => {
   if (!stripe) {
-    return res.status(503).json({
-      error: 'Stripe not configured. Set STRIPE_SECRET_KEY in your environment.',
-    });
+    const hint = stripeKey && !isValidStripeSecretKey(stripeKey)
+      ? 'Invalid Stripe key format. Use your Secret key (sk_test_... or sk_live_...) from https://dashboard.stripe.com/apikeys — not an mk_ key.'
+      : 'Stripe not configured. Set STRIPE_SECRET_KEY in backend/.env';
+    return res.status(503).json({ error: hint });
   }
 
   const { customer, items, total } = req.body;
@@ -239,10 +247,20 @@ app.get('/admin', (_, res) => {
 });
 
 app.get('/api/health', (_, res) => {
-  res.json({ status: 'ok', service: 'pocket-planter-api' });
+  res.json({
+    status: 'ok',
+    service: 'pocket-planter-api',
+    stripe: stripe ? 'ready' : stripeKey ? 'invalid_key' : 'not_configured',
+  });
 });
 
 app.listen(PORT, () => {
   console.log(`Pocket Planter server running at http://localhost:${PORT}`);
   console.log(`CMS admin at http://localhost:${PORT}/admin`);
+  if (stripeKey && !stripe) {
+    console.warn('Stripe disabled: STRIPE_SECRET_KEY must start with sk_test_, sk_live_, rk_test_, or rk_live_');
+    console.warn('Get your Secret key at https://dashboard.stripe.com/test/apikeys');
+  } else if (stripe) {
+    console.log('Stripe checkout ready');
+  }
 });

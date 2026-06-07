@@ -2,4 +2,5 @@ backend/node_modules/
 backend/data/
 uploads/
 .env
+backend/.env
 .DS_Store
