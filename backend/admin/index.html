@@ -40,6 +40,7 @@
         <button data-tab="videos" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Videos</button>
         <button data-tab="gallery" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Gallery</button>
         <button data-tab="product" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Product</button>
+        <button data-tab="footer" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Footer</button>
         <button data-tab="orders" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Orders</button>
       </nav>
 
@@ -102,6 +103,15 @@
             <textarea id="shopIntro" placeholder="Intro text" rows="2" class="cms-input"></textarea>
           </div>
           <button onclick="saveContent()" class="cms-save">Save Content</button>
+        </div>
+
+        <div id="tab-footer" class="tab-panel hidden space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Footer</h2>
+          <p class="text-sm text-[#6f7a6b]">Edit the site footer text shown at the bottom of every page.</p>
+          <div><label class="text-sm font-semibold">Brand Name</label><input id="footerBrand" class="cms-input" placeholder="Pocket Planter"></div>
+          <div><label class="text-sm font-semibold">Tagline</label><textarea id="footerTagline" rows="2" class="cms-input" placeholder="From Pocket — To Plant. Presented by…"></textarea></div>
+          <div><label class="text-sm font-semibold">Copyright</label><input id="footerCopyright" class="cms-input" placeholder="© 2026 Pocket Planter"></div>
+          <button onclick="saveFooter()" class="cms-save">Save Footer</button>
         </div>
 
         <div id="tab-videos" class="tab-panel hidden space-y-4">
@@ -258,6 +268,9 @@
       navBottomStory.value = content.nav?.bottomStory || '';
       navBottomMission.value = content.nav?.bottomMission || '';
       navBottomShop.value = content.nav?.bottomShop || '';
+      footerBrand.value = content.footer?.brand || '';
+      footerTagline.value = content.footer?.tagline || '';
+      footerCopyright.value = content.footer?.copyright || '';
       heroEyebrow.value = content.hero?.eyebrow || '';
       heroTitle.value = content.hero?.title || '';
       heroSubtitle.value = content.hero?.subtitle || '';
@@ -287,6 +300,16 @@
 
     function parseBenefits(text) {
       return text.split('\n').map((line) => line.trim()).filter(Boolean);
+    }
+
+    async function saveFooter() {
+      content.footer = {
+        brand: footerBrand.value.trim() || 'Pocket Planter',
+        tagline: footerTagline.value.trim() || '',
+        copyright: footerCopyright.value.trim() || '',
+      };
+      await api('/api/content/footer', { method: 'PUT', body: JSON.stringify(content.footer) });
+      toast();
     }
 
     async function saveNav() {

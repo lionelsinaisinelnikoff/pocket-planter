@@ -40,6 +40,7 @@ async function loadCMS() {
     if (!res.ok) return;
     const c = await res.json();
     if (c.nav) renderNav(c.nav);
+    if (c.footer) renderFooter(c.footer);
     if (c.hero?.eyebrow) $('#heroEyebrow').textContent = c.hero.eyebrow;
     if (c.hero?.title) $('#heroTitle').innerHTML = c.hero.title;
     if (c.hero?.subtitle) $('#heroSubtitle').innerHTML = c.hero.subtitle;
@@ -73,6 +74,12 @@ async function loadCMS() {
     }
     if (c.steps?.length >= 3) renderSteps(c.steps);
   } catch { /* static fallback */ }
+}
+
+function renderFooter(footer) {
+  if (footer.brand && $('#footerBrand')) $('#footerBrand').textContent = footer.brand;
+  if (footer.tagline && $('#footerTagline')) $('#footerTagline').textContent = footer.tagline;
+  if (footer.copyright && $('#footerCopyright')) $('#footerCopyright').textContent = footer.copyright;
 }
 
 function renderNav(nav) {

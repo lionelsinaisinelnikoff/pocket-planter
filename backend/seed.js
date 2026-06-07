@@ -2,6 +2,11 @@ const bcrypt = require('bcryptjs');
 const db = require('./db');
 
 const defaultContent = {
+  footer: {
+    brand: 'Pocket Planter',
+    tagline: 'From Pocket — To Plant. Presented by Rafael Sinai-Sinelnikoff, AAESS 7B (2025/26).',
+    copyright: '© 2026 Pocket Planter',
+  },
   nav: {
     brand: 'Pocket Planter',
     story: "Rafael's Story",
