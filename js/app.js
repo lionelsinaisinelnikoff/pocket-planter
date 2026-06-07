@@ -1,7 +1,16 @@
-/* Pocket Planter — Dynamic App (Brand Box Edition) */
+/* Pocket Planter — CMS-Powered App */
 
-const BASE_PRICE = 28;
-const PRODUCT_IMAGES = [
+const API_BASE = window.location.port === '3000' || window.location.hostname === 'localhost'
+  ? ''
+  : (window.PP_API_BASE || '');
+
+const FALLBACK_VIDEOS = [
+  { title: 'Plant Anywhere', description: 'See how kids turn every walk into a planting adventure with Pocket Planter.', videoUrl: 'assets/videos/plant-anywhere.mp4', posterUrl: 'assets/videos/posters/plant-anywhere.jpg' },
+  { title: 'Seed to Sprout', description: 'Watch the magic of growth — from a tiny seed to a living plant.', videoUrl: 'assets/videos/seed-sprout.mp4', posterUrl: 'assets/videos/posters/seed-sprout.jpg' },
+  { title: 'Every Walk is a Garden', description: 'Families planting together, one pocketful of nature at a time.', videoUrl: 'assets/videos/walk-garden.mp4', posterUrl: 'assets/videos/posters/walk-garden.jpg' },
+];
+
+const FALLBACK_GALLERY = [
   { src: 'assets/images/IMG_4217.jpg', alt: 'Pocket Planter kit front view' },
   { src: 'assets/images/IMG_4218.jpg', alt: 'Pocket Planter side view' },
   { src: 'assets/images/IMG_4219.jpg', alt: 'Pocket Planter seed dispenser' },
@@ -10,18 +19,25 @@ const PRODUCT_IMAGES = [
   { src: 'assets/images/IMG_4270.jpg', alt: 'Pocket Planter held in hand' },
 ];
 
+let siteContent = null;
+let BASE_PRICE = 28;
+let PRODUCT_IMAGES = FALLBACK_GALLERY;
+let videos = FALLBACK_VIDEOS;
 let cart = loadCart();
 let currentImageIndex = 0;
 let lightboxIndex = 0;
+let activeVideoIndex = 0;
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initLoader();
   initNav();
   initReveal();
   initLeaves();
+  await loadCMS();
+  initVideos();
   initGallery();
   initProductGallery();
   initSteps();
@@ -32,22 +48,94 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
 });
 
+async function loadCMS() {
+  try {
+    const res = await fetch(`${API_BASE}/api/content`);
+    if (!res.ok) throw new Error('API unavailable');
+    siteContent = await res.json();
+    applyContent(siteContent);
+    if (siteContent.videos?.length) videos = siteContent.videos;
+    if (siteContent.gallery?.length) PRODUCT_IMAGES = siteContent.gallery;
+  } catch {
+    console.info('Running in static mode — using fallback content');
+  }
+}
+
+function applyContent(c) {
+  if (c.hero) {
+    const parts = (c.hero.title || '').split(':');
+    if (parts.length > 1) {
+      $('#heroTitle').innerHTML = `${parts[0]}: <span class="block text-secondary">${parts.slice(1).join(':').trim()}</span>`;
+    } else if (c.hero.title) {
+      $('#heroTitle').textContent = c.hero.title;
+    }
+    if (c.hero.subtitle) $('#heroSubtitle').textContent = c.hero.subtitle;
+    if (c.hero.cta) {
+      $('#heroCta').innerHTML = `${c.hero.cta} <span class="material-symbols-outlined text-lg">arrow_forward</span>`;
+    }
+    if (c.hero.stats) {
+      $('#statPrice').textContent = c.hero.stats.price ?? 28;
+      $('#statSteps').textContent = c.hero.stats.steps ?? 4;
+      $('#statAges').textContent = c.hero.stats.ages ?? '5–16';
+    }
+  }
+
+  if (c.dilemma?.body) $('#dilemmaBody').textContent = c.dilemma.body;
+  if (c.solution?.body) $('#solutionBody').textContent = c.solution.body;
+
+  if (c.product) {
+    BASE_PRICE = c.product.basePrice || 28;
+    const nameEl = $('#productCard h3');
+    if (nameEl && c.product.name) nameEl.textContent = c.product.name;
+    const tagEl = $('#productCard .text-label-bold');
+    if (tagEl && c.product.tagline) tagEl.textContent = c.product.tagline;
+    const descEl = $('#productCard .text-body-md.text-on-surface-variant');
+    if (descEl && c.product.description) descEl.textContent = c.product.description;
+    updatePrice();
+  }
+
+  if (c.pitch) {
+    if (c.pitch.equity) $('#pitchEquity').textContent = c.pitch.equity;
+    if (c.pitch.funding) $('#pitchFunding').textContent = c.pitch.funding;
+    if (c.pitch.email) {
+      $('#pitchEmail').href = `mailto:${c.pitch.email}`;
+      $('#pitchEmail').innerHTML = `<span class="material-symbols-outlined">mail</span> ${c.pitch.email}`;
+    }
+  }
+
+  if (c.steps?.length) {
+    const container = $('#steps');
+    container.innerHTML = c.steps.map((s) => `
+      <div class="step-card flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border-l-4 border-primary reveal" data-step="${s.num}">
+        <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">${s.num}</div>
+        <div>
+          <p class="text-body-md font-bold text-on-surface">${s.title}</p>
+          <p class="text-body-md text-on-surface-variant">${s.body}</p>
+        </div>
+      </div>
+    `).join('');
+    $$('#steps .reveal').forEach((el) => {
+      const obs = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); }
+      }, { threshold: 0.1 });
+      obs.observe(el);
+    });
+  }
+}
+
 function initLoader() {
-  const loader = $('#pageLoader');
   window.addEventListener('load', () => {
-    setTimeout(() => loader.classList.add('hidden'), 500);
+    setTimeout(() => $('#pageLoader')?.classList.add('hidden'), 500);
   });
 }
 
 function initNav() {
   const toggle = $('#navToggle');
   const mobileNav = $('#mobileNav');
-
   toggle?.addEventListener('click', () => {
-    const open = mobileNav.classList.toggle('hidden');
-    toggle.setAttribute('aria-expanded', !open);
+    const hidden = mobileNav.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', !hidden);
   });
-
   mobileNav?.querySelectorAll('a').forEach((a) => {
     a.addEventListener('click', () => mobileNav.classList.add('hidden'));
   });
@@ -57,10 +145,7 @@ function initReveal() {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          observer.unobserve(e.target);
-        }
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
       });
     },
     { threshold: 0.12, rootMargin: '0px 0px -30px 0px' }
@@ -80,30 +165,68 @@ function initLeaves() {
   }
 }
 
+function initVideos() {
+  const thumbs = $('#videoThumbs');
+  if (!thumbs || !videos.length) return;
+
+  thumbs.innerHTML = videos.map((v, i) => `
+    <button class="video-thumb${i === 0 ? ' active' : ''}" data-index="${i}" type="button">
+      <img class="video-thumb-poster" src="${v.posterUrl || v.poster_url}" alt="">
+      <div class="video-thumb-info">
+        <h4>${v.title}</h4>
+        <p>${v.description || ''}</p>
+      </div>
+      <span class="material-symbols-outlined video-thumb-play">play_circle</span>
+    </button>
+  `).join('');
+
+  thumbs.querySelectorAll('.video-thumb').forEach((btn) => {
+    btn.addEventListener('click', () => playVideo(+btn.dataset.index));
+  });
+
+  playVideo(0);
+}
+
+function playVideo(index) {
+  activeVideoIndex = index;
+  const v = videos[index];
+  const player = $('#featuredVideo');
+  const url = v.videoUrl || v.video_url;
+  const poster = v.posterUrl || v.poster_url;
+
+  player.poster = poster;
+  player.src = url;
+  player.load();
+
+  $('#featuredTitle').textContent = v.title;
+  $('#featuredDesc').textContent = v.description || '';
+
+  $$('.video-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+}
+
 function initGallery() {
   const grid = $('#galleryGrid');
   PRODUCT_IMAGES.forEach((img, i) => {
+    const src = img.src;
+    const alt = img.alt || '';
     const item = document.createElement('div');
     item.className = 'gallery-item reveal';
-    item.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy">`;
+    item.innerHTML = `<img src="${src}" alt="${alt}" loading="lazy">`;
     item.addEventListener('click', () => openLightbox(i));
     grid.appendChild(item);
   });
 
   grid.querySelectorAll('.reveal').forEach((el) => {
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); } },
-      { threshold: 0.1 }
-    );
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); }
+    }, { threshold: 0.1 });
     obs.observe(el);
   });
 
   $('#lightboxClose').addEventListener('click', closeLightbox);
   $('#lightboxPrev').addEventListener('click', () => navigateLightbox(-1));
   $('#lightboxNext').addEventListener('click', () => navigateLightbox(1));
-  $('#lightbox').addEventListener('click', (e) => {
-    if (e.target.id === 'lightbox') closeLightbox();
-  });
+  $('#lightbox').addEventListener('click', (e) => { if (e.target.id === 'lightbox') closeLightbox(); });
   document.addEventListener('keydown', (e) => {
     if ($('#lightbox').hidden) return;
     if (e.key === 'Escape') closeLightbox();
@@ -114,7 +237,9 @@ function initGallery() {
 
 function openLightbox(index) {
   lightboxIndex = index;
-  updateLightboxImage();
+  const img = PRODUCT_IMAGES[index];
+  $('#lightboxImg').src = img.src;
+  $('#lightboxImg').alt = img.alt || '';
   $('#lightbox').hidden = false;
   document.body.style.overflow = 'hidden';
 }
@@ -126,13 +251,9 @@ function closeLightbox() {
 
 function navigateLightbox(dir) {
   lightboxIndex = (lightboxIndex + dir + PRODUCT_IMAGES.length) % PRODUCT_IMAGES.length;
-  updateLightboxImage();
-}
-
-function updateLightboxImage() {
   const img = PRODUCT_IMAGES[lightboxIndex];
   $('#lightboxImg').src = img.src;
-  $('#lightboxImg').alt = img.alt;
+  $('#lightboxImg').alt = img.alt || '';
 }
 
 function initProductGallery() {
@@ -152,13 +273,14 @@ function setProductImage(index) {
   currentImageIndex = index;
   const img = PRODUCT_IMAGES[index];
   $('#productMainImg').src = img.src;
-  $('#productMainImg').alt = img.alt;
+  $('#productMainImg').alt = img.alt || '';
   $$('.product-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
 }
 
 function initSteps() {
   const steps = $$('.step-card');
   const section = $('#how-it-works');
+  if (!steps.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -181,18 +303,15 @@ function initSteps() {
 function initShop() {
   $$('.addon input').forEach((a) => a.addEventListener('change', updatePrice));
   $('#qtyMinus').addEventListener('click', () => {
-    const qty = $('#qty');
-    qty.value = Math.max(1, parseInt(qty.value, 10) - 1);
+    $('#qty').value = Math.max(1, parseInt($('#qty').value, 10) - 1);
     updatePrice();
   });
   $('#qtyPlus').addEventListener('click', () => {
-    const qty = $('#qty');
-    qty.value = Math.min(10, parseInt(qty.value, 10) + 1);
+    $('#qty').value = Math.min(10, parseInt($('#qty').value, 10) + 1);
     updatePrice();
   });
   $('#qty').addEventListener('change', () => {
-    const qty = $('#qty');
-    qty.value = Math.min(10, Math.max(1, parseInt(qty.value, 10) || 1));
+    $('#qty').value = Math.min(10, Math.max(1, parseInt($('#qty').value, 10) || 1));
     updatePrice();
   });
   $('#addToCart').addEventListener('click', addCurrentToCart);
@@ -224,25 +343,12 @@ function addCurrentToCart() {
   const qty = parseInt($('#qty').value, 10) || 1;
   const addons = getSelectedAddons();
   const unitPrice = getUnitPrice();
-
   const existing = cart.find(
-    (item) =>
-      item.addons.length === addons.length &&
-      item.addons.every((a, i) => a.id === addons[i]?.id)
+    (item) => item.addons.length === addons.length && item.addons.every((a, i) => a.id === addons[i]?.id)
   );
 
-  if (existing) {
-    existing.qty += qty;
-  } else {
-    cart.push({
-      id: Date.now(),
-      name: 'Pocket Planter Kit',
-      image: PRODUCT_IMAGES[currentImageIndex].src,
-      addons,
-      unitPrice,
-      qty,
-    });
-  }
+  if (existing) existing.qty += qty;
+  else cart.push({ id: Date.now(), name: 'Pocket Planter Kit', image: PRODUCT_IMAGES[currentImageIndex].src, addons, unitPrice, qty });
 
   saveCart();
   updateCartUI();
@@ -296,10 +402,7 @@ function updateCartUI() {
   cart.forEach((item) => {
     const lineTotal = item.unitPrice * item.qty;
     total += lineTotal;
-    const addonText = item.addons.length
-      ? item.addons.map((a) => a.name).join(', ')
-      : 'Base kit only';
-
+    const addonText = item.addons.length ? item.addons.map((a) => a.name).join(', ') : 'Base kit only';
     const el = document.createElement('div');
     el.className = 'cart-item';
     el.innerHTML = `
@@ -311,8 +414,7 @@ function updateCartUI() {
           <span>Qty: ${item.qty} — <span class="cart-item-price">${lineTotal} AED</span></span>
           <button class="cart-item-remove" data-id="${item.id}">Remove</button>
         </div>
-      </div>
-    `;
+      </div>`;
     el.querySelector('.cart-item-remove').addEventListener('click', () => {
       cart = cart.filter((c) => c.id !== item.id);
       saveCart();
@@ -320,35 +422,27 @@ function updateCartUI() {
     });
     itemsEl.appendChild(el);
   });
-
   $('#cartTotal').textContent = total;
 }
 
 function initCheckout() {
   $('#checkoutClose').addEventListener('click', closeCheckout);
   $('#checkoutOverlay').addEventListener('click', closeCheckout);
-  $('#checkoutForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    submitOrder();
-  });
+  $('#checkoutForm').addEventListener('submit', (e) => { e.preventDefault(); submitOrder(); });
 }
 
 function openCheckout() {
   if (cart.length === 0) return;
   closeCart();
-
   const total = cart.reduce((s, i) => s + i.unitPrice * i.qty, 0);
   let html = '';
   cart.forEach((item) => {
-    const addonText = item.addons.length
-      ? ` (${item.addons.map((a) => a.name).join(', ')})`
-      : '';
+    const addonText = item.addons.length ? ` (${item.addons.map((a) => a.name).join(', ')})` : '';
     html += `<div class="summary-line"><span>${item.name}${addonText} × ${item.qty}</span><span>${item.unitPrice * item.qty} AED</span></div>`;
   });
   html += `<div class="summary-total"><span>Total</span><span>${total} AED</span></div>`;
   $('#checkoutSummary').innerHTML = html;
   $('#checkoutTotal').textContent = total;
-
   $('#checkoutModal').hidden = false;
   $('#checkoutOverlay').hidden = false;
   requestAnimationFrame(() => $('#checkoutModal').classList.add('open'));
@@ -362,7 +456,7 @@ function closeCheckout() {
   setTimeout(() => { $('#checkoutModal').hidden = true; }, 300);
 }
 
-function submitOrder() {
+async function submitOrder() {
   const order = {
     id: `PP-${Date.now().toString(36).toUpperCase()}`,
     date: new Date().toISOString(),
@@ -382,9 +476,18 @@ function submitOrder() {
     total: cart.reduce((s, i) => s + i.unitPrice * i.qty, 0),
   };
 
-  const orders = JSON.parse(localStorage.getItem('pp_orders') || '[]');
-  orders.push(order);
-  localStorage.setItem('pp_orders', JSON.stringify(orders));
+  try {
+    const res = await fetch(`${API_BASE}/api/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error('API error');
+  } catch {
+    const orders = JSON.parse(localStorage.getItem('pp_orders') || '[]');
+    orders.push(order);
+    localStorage.setItem('pp_orders', JSON.stringify(orders));
+  }
 
   cart = [];
   saveCart();
@@ -397,33 +500,21 @@ function submitOrder() {
 function initBottomNav() {
   const items = $$('.bottom-nav-item');
   const sections = ['hero', 'story', 'shop', 'pitch'];
-
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
-          const id = e.target.id;
-          items.forEach((item) => {
-            item.classList.toggle('active', item.dataset.section === id);
-          });
+          items.forEach((item) => item.classList.toggle('active', item.dataset.section === e.target.id));
         }
       });
     },
     { threshold: 0.4, rootMargin: '-64px 0px -40% 0px' }
   );
-
-  sections.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
+  sections.forEach((id) => { const el = document.getElementById(id); if (el) observer.observe(el); });
 }
 
 function loadCart() {
-  try {
-    return JSON.parse(localStorage.getItem('pp_cart') || '[]');
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(localStorage.getItem('pp_cart') || '[]'); } catch { return []; }
 }
 
 function saveCart() {

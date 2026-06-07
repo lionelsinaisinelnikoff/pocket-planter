@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pocket Planter CMS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-[#fbfaf2] text-[#1b1c17] min-h-screen">
+
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-6">
+    <form id="loginForm" class="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm border-2 border-[#006e1c]/10">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-[#006e1c]">Pocket Planter CMS</h1>
+        <p class="text-sm text-[#6f7a6b] mt-1">Content management</p>
+      </div>
+      <label class="block text-sm font-semibold mb-1">Password</label>
+      <input type="password" id="loginPassword" required class="w-full px-4 py-3 rounded-xl border-2 border-[#becab9] mb-4 focus:border-[#006e1c] focus:outline-none">
+      <button type="submit" class="w-full bg-[#006e1c] text-white py-3 rounded-full font-bold hover:opacity-90">Sign In</button>
+      <p id="loginError" class="text-red-600 text-sm mt-3 hidden"></p>
+    </form>
+  </div>
+
+  <div id="cmsApp" class="hidden">
+    <header class="bg-[#006e1c] text-white px-6 py-4 flex justify-between items-center">
+      <h1 class="font-bold text-lg">Pocket Planter CMS</h1>
+      <div class="flex gap-3 items-center">
+        <a href="/" target="_blank" class="text-sm opacity-80 hover:opacity-100">View Site →</a>
+        <button id="logoutBtn" class="text-sm bg-white/20 px-3 py-1 rounded-full">Logout</button>
+      </div>
+    </header>
+
+    <div class="flex">
+      <nav class="w-56 bg-white border-r border-[#becab9] min-h-[calc(100vh-56px)] p-4 space-y-1">
+        <button data-tab="hero" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm bg-[#b2efa6] text-[#386e34]">Hero</button>
+        <button data-tab="content" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Content</button>
+        <button data-tab="videos" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Videos</button>
+        <button data-tab="gallery" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Gallery</button>
+        <button data-tab="product" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Product</button>
+        <button data-tab="orders" class="tab-btn w-full text-left px-3 py-2 rounded-lg font-semibold text-sm hover:bg-[#f5f4ec]">Orders</button>
+      </nav>
+
+      <main class="flex-1 p-6 max-w-3xl">
+        <div id="tab-hero" class="tab-panel space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Hero Section</h2>
+          <div><label class="text-sm font-semibold">Title</label><input id="heroTitle" class="cms-input"></div>
+          <div><label class="text-sm font-semibold">Subtitle</label><textarea id="heroSubtitle" rows="2" class="cms-input"></textarea></div>
+          <div><label class="text-sm font-semibold">CTA Button</label><input id="heroCta" class="cms-input"></div>
+          <button onclick="saveHero()" class="cms-save">Save Hero</button>
+        </div>
+
+        <div id="tab-content" class="tab-panel hidden space-y-6">
+          <h2 class="text-xl font-bold text-[#006e1c]">Page Content</h2>
+          <div class="space-y-3 p-4 bg-white rounded-xl border">
+            <h3 class="font-bold">The Dilemma</h3>
+            <textarea id="dilemmaBody" rows="3" class="cms-input"></textarea>
+          </div>
+          <div class="space-y-3 p-4 bg-white rounded-xl border">
+            <h3 class="font-bold">My Solution</h3>
+            <textarea id="solutionBody" rows="3" class="cms-input"></textarea>
+          </div>
+          <div class="space-y-3 p-4 bg-white rounded-xl border">
+            <h3 class="font-bold">The Pitch</h3>
+            <input id="pitchEquity" placeholder="Equity ask" class="cms-input">
+            <input id="pitchFunding" placeholder="Funding amount" class="cms-input">
+            <input id="pitchEmail" placeholder="Email" class="cms-input">
+          </div>
+          <button onclick="saveContent()" class="cms-save">Save Content</button>
+        </div>
+
+        <div id="tab-videos" class="tab-panel hidden space-y-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-bold text-[#006e1c]">Inspirational Videos</h2>
+            <button onclick="showAddVideo()" class="text-sm bg-[#006e1c] text-white px-4 py-2 rounded-full font-bold">+ Add Video</button>
+          </div>
+          <div id="videosList" class="space-y-3"></div>
+          <div id="videoForm" class="hidden p-4 bg-white rounded-xl border space-y-3">
+            <input id="vfTitle" placeholder="Title" class="cms-input">
+            <textarea id="vfDesc" placeholder="Description" rows="2" class="cms-input"></textarea>
+            <input id="vfUrl" placeholder="Video URL (e.g. /assets/videos/plant-anywhere.mp4)" class="cms-input">
+            <input id="vfPoster" placeholder="Poster URL" class="cms-input">
+            <input id="vfOrder" type="number" placeholder="Sort order" class="cms-input">
+            <input type="file" id="vfUpload" accept="video/*" class="text-sm">
+            <div class="flex gap-2">
+              <button onclick="saveVideo()" class="cms-save">Save Video</button>
+              <button onclick="hideVideoForm()" class="px-4 py-2 rounded-full border text-sm">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-gallery" class="tab-panel hidden space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Gallery Images</h2>
+          <div id="galleryList" class="grid grid-cols-3 gap-3"></div>
+          <div class="p-4 bg-white rounded-xl border space-y-3">
+            <input id="galSrc" placeholder="Image URL" class="cms-input">
+            <input id="galAlt" placeholder="Alt text" class="cms-input">
+            <button onclick="addGallery()" class="cms-save">Add Image</button>
+          </div>
+        </div>
+
+        <div id="tab-product" class="tab-panel hidden space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Product</h2>
+          <input id="prodName" class="cms-input" placeholder="Product name">
+          <input id="prodPrice" type="number" class="cms-input" placeholder="Base price (AED)">
+          <textarea id="prodDesc" rows="3" class="cms-input" placeholder="Description"></textarea>
+          <button onclick="saveProduct()" class="cms-save">Save Product</button>
+        </div>
+
+        <div id="tab-orders" class="tab-panel hidden space-y-4">
+          <h2 class="text-xl font-bold text-[#006e1c]">Orders</h2>
+          <div id="ordersList" class="space-y-3"></div>
+        </div>
+
+        <p id="saveToast" class="fixed bottom-6 right-6 bg-[#006e1c] text-white px-5 py-3 rounded-full font-semibold shadow-lg hidden">Saved!</p>
+      </main>
+    </div>
+  </div>
+
+  <style>
+    .cms-input { width: 100%; padding: 0.75rem 1rem; border: 2px solid #becab9; border-radius: 0.75rem; margin-top: 0.25rem; }
+    .cms-input:focus { outline: none; border-color: #006e1c; }
+    .cms-save { background: #006e1c; color: white; padding: 0.6rem 1.5rem; border-radius: 9999px; font-weight: 700; }
+    .cms-save:hover { opacity: 0.9; }
+  </style>
+
+  <script>
+    let token = localStorage.getItem('pp_cms_token');
+    let content = {};
+    let editingVideoId = null;
+
+    const api = (path, opts = {}) => fetch(path, {
+      ...opts,
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...opts.headers },
+    });
+
+    function toast(msg = 'Saved!') {
+      const el = document.getElementById('saveToast');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 2000);
+    }
+
+    function showApp() {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('cmsApp').classList.remove('hidden');
+      loadContent();
+    }
+
+    if (token) showApp();
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const res = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ password: document.getElementById('loginPassword').value }) });
+      if (!res.ok) {
+        document.getElementById('loginError').textContent = 'Invalid password';
+        document.getElementById('loginError').classList.remove('hidden');
+        return;
+      }
+      const data = await res.json();
+      token = data.token;
+      localStorage.setItem('pp_cms_token', token);
+      showApp();
+    });
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+      token = null;
+      localStorage.removeItem('pp_cms_token');
+      location.reload();
+    });
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('bg-[#b2efa6]', 'text-[#386e34]'));
+        btn.classList.add('bg-[#b2efa6]', 'text-[#386e34]');
+        document.querySelectorAll('.tab-panel').forEach((p) => p.classList.add('hidden'));
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
+        if (btn.dataset.tab === 'orders') loadOrders();
+        if (btn.dataset.tab === 'videos') loadVideos();
+        if (btn.dataset.tab === 'gallery') loadGallery();
+      });
+    });
+
+    async function loadContent() {
+      const res = await api('/api/content');
+      content = await res.json();
+      document.getElementById('heroTitle').value = content.hero?.title || '';
+      document.getElementById('heroSubtitle').value = content.hero?.subtitle || '';
+      document.getElementById('heroCta').value = content.hero?.cta || '';
+      document.getElementById('dilemmaBody').value = content.dilemma?.body || '';
+      document.getElementById('solutionBody').value = content.solution?.body || '';
+      document.getElementById('pitchEquity').value = content.pitch?.equity || '';
+      document.getElementById('pitchFunding').value = content.pitch?.funding || '';
+      document.getElementById('pitchEmail').value = content.pitch?.email || '';
+      document.getElementById('prodName').value = content.product?.name || '';
+      document.getElementById('prodPrice').value = content.product?.basePrice || '';
+      document.getElementById('prodDesc').value = content.product?.description || '';
+    }
+
+    async function saveHero() {
+      content.hero = { ...content.hero, title: heroTitle.value, subtitle: heroSubtitle.value, cta: heroCta.value };
+      await api('/api/content/hero', { method: 'PUT', body: JSON.stringify(content.hero) });
+      toast();
+    }
+
+    async function saveContent() {
+      content.dilemma = { ...content.dilemma, body: dilemmaBody.value };
+      content.solution = { ...content.solution, body: solutionBody.value };
+      content.pitch = { ...content.pitch, equity: pitchEquity.value, funding: pitchFunding.value, email: pitchEmail.value };
+      await Promise.all([
+        api('/api/content/dilemma', { method: 'PUT', body: JSON.stringify(content.dilemma) }),
+        api('/api/content/solution', { method: 'PUT', body: JSON.stringify(content.solution) }),
+        api('/api/content/pitch', { method: 'PUT', body: JSON.stringify(content.pitch) }),
+      ]);
+      toast();
+    }
+
+    async function saveProduct() {
+      content.product = { ...content.product, name: prodName.value, basePrice: +prodPrice.value, description: prodDesc.value };
+      await api('/api/content/product', { method: 'PUT', body: JSON.stringify(content.product) });
+      toast();
+    }
+
+    async function loadVideos() {
+      const res = await api('/api/videos');
+      const videos = await res.json();
+      videosList.innerHTML = videos.map((v) => `
+        <div class="p-4 bg-white rounded-xl border flex gap-4 items-center">
+          <img src="${v.poster_url}" class="w-20 h-12 object-cover rounded" onerror="this.style.display='none'">
+          <div class="flex-1">
+            <p class="font-bold">${v.title}</p>
+            <p class="text-sm text-[#6f7a6b]">${v.description || ''}</p>
+          </div>
+          <button onclick="editVideo(${v.id})" class="text-sm text-[#006e1c] font-semibold">Edit</button>
+          <button onclick="deleteVideo(${v.id})" class="text-sm text-red-600">Delete</button>
+        </div>
+      `).join('');
+    }
+
+    function showAddVideo() { editingVideoId = null; videoForm.classList.remove('hidden'); }
+    function hideVideoForm() { videoForm.classList.add('hidden'); }
+
+    async function saveVideo() {
+      const body = { title: vfTitle.value, description: vfDesc.value, videoUrl: vfUrl.value, posterUrl: vfPoster.value, sortOrder: +vfOrder.value || 0 };
+      if (editingVideoId) {
+        await api(`/api/videos/${editingVideoId}`, { method: 'PUT', body: JSON.stringify({ ...body, video_url: body.videoUrl, poster_url: body.posterUrl, sort_order: body.sortOrder }) });
+      } else {
+        await api('/api/videos', { method: 'POST', body: JSON.stringify(body) });
+      }
+      hideVideoForm();
+      loadVideos();
+      toast();
+    }
+
+    async function deleteVideo(id) {
+      if (!confirm('Delete this video?')) return;
+      await api(`/api/videos/${id}`, { method: 'DELETE' });
+      loadVideos();
+    }
+
+    async function loadGallery() {
+      const res = await api('/api/gallery');
+      const items = await res.json();
+      galleryList.innerHTML = items.map((g) => `
+        <div class="relative group">
+          <img src="${g.src}" class="w-full aspect-square object-cover rounded-lg">
+          <button onclick="deleteGallery(${g.id})" class="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100">×</button>
+        </div>
+      `).join('');
+    }
+
+    async function addGallery() {
+      await api('/api/gallery', { method: 'POST', body: JSON.stringify({ src: galSrc.value, alt: galAlt.value }) });
+      galSrc.value = ''; galAlt.value = '';
+      loadGallery();
+      toast();
+    }
+
+    async function deleteGallery(id) {
+      await api(`/api/gallery/${id}`, { method: 'DELETE' });
+      loadGallery();
+    }
+
+    async function loadOrders() {
+      const res = await api('/api/orders');
+      const orders = await res.json();
+      ordersList.innerHTML = orders.length ? orders.map((o) => `
+        <div class="p-4 bg-white rounded-xl border">
+          <div class="flex justify-between"><strong>${o.id}</strong><span class="text-sm px-2 py-0.5 rounded-full ${o.status === 'pending' ? 'bg-yellow-100' : 'bg-green-100'}">${o.status}</span></div>
+          <p class="text-sm mt-1">${o.customer_name} — ${o.customer_email}</p>
+          <p class="text-sm text-[#6f7a6b]">${o.total} AED</p>
+          <button onclick="fulfillOrder('${o.id}')" class="text-xs text-[#006e1c] mt-2 font-semibold">Mark Fulfilled</button>
+        </div>
+      `).join('') : '<p class="text-[#6f7a6b]">No orders yet.</p>';
+    }
+
+    async function fulfillOrder(id) {
+      await api(`/api/orders/${id}`, { method: 'PATCH', body: JSON.stringify({ status: 'fulfilled' }) });
+      loadOrders();
+    }
+  </script>
+</body>
+</html>
